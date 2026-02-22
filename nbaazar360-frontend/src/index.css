@@ -1,0 +1,302 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B54B4B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8B3A3A;
+}
+
+/* Pannellum custom styles */
+.pnlm-container {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pnlm-hotspot-base {
+  cursor: pointer;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero gradient overlay */
+.hero-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Leaflet Custom Styles */
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+/* Fix Leaflet map z-index - ensure it stays below header */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.leaflet-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 100 !important;
+}
+
+.leaflet-control {
+  z-index: 100 !important;
+}
+
+/* Leaflet Custom Popup Styles - IMPROVED */
+.leaflet-popup-content-wrapper {
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+  min-width: 300px;
+}
+
+.leaflet-popup-tip {
+  background: white;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-popup-close-button {
+  color: #999 !important;
+  font-size: 28px !important;
+  font-weight: 300 !important;
+  padding: 12px 16px !important;
+  width: 44px !important;
+  height: 44px !important;
+  transition: all 0.2s ease;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #B54B4B !important;
+  transform: scale(1.1);
+}
+
+.custom-popup .leaflet-popup-content {
+  overflow: hidden;
+}
+
+/* Add smooth animation when popup opens */
+.leaflet-popup {
+  animation: popupFadeIn 0.3s ease-out;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbar for mobile scrollable tabs */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* Error shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* 360° Viewer Full Screen */
+#panorama {
+  width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+#panorama .pnlm-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Ensure panorama controls are visible above overlay */
+.pnlm-controls-container {
+  z-index: 10001 !important;
+}
+
+/* Hide body scroll when viewer is open */
+body.viewer-open {
+  overflow: hidden !important;
+}
+
+/* ================================
+   React Calendar Customization
+   ================================ */
+.events-calendar {
+  border: none !important;
+  font-family: inherit;
+  width: 100% !important;
+}
+
+.react-calendar {
+  border: none !important;
+  font-family: inherit;
+  background: transparent;
+}
+
+.react-calendar__tile {
+  padding: 0.75em 0.5em;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.react-calendar__tile--active {
+  background: #B54B4B !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now {
+  background: #FEE2E2 !important;
+  color: #B54B4B;
+  font-weight: 600;
+}
+
+.react-calendar__tile:hover {
+  background: #F3F4F6 !important;
+}
+
+.react-calendar__tile--active:hover {
+  background: #9A3F3F !important;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #B54B4B;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 1em;
+}
+
+.react-calendar__navigation button {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1f2937;
+  border-radius: 8px;
+  padding: 0.5em;
+}
+
+.react-calendar__navigation button:hover {
+  background: #F3F4F6 !important;
+}
+
+.react-calendar__navigation button:disabled {
+  background: transparent;
+  color: #9CA3AF;
+}
+
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: #6B7280;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+/* Highlight dates that have events */
+.react-calendar__tile.has-event {
+  position: relative;
+}
+
+.react-calendar__tile.has-event::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #B54B4B;
+  border-radius: 50%;
+}
+
+.react-calendar__tile--active.has-event::after {
+  background: white;
+}
