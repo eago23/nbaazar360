@@ -6,7 +6,7 @@ Platforma digjitale për Pazarin e Ri, Tiranë.
 
 ### 1. Klono projektin
 ```bash
-git clone https://github.com/YOUR_USERNAME/nbazaar360.git
+git clone https://github.com/eago23/nbazaar360.git
 cd nbazaar360
 ```
 
