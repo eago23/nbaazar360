@@ -105,7 +105,6 @@ const createStory = asyncHandler(async (req, res) => {
     full_story,
     thumbnail_url,
     video_url,
-    duration_seconds,
     location_id,
     vendor_id,
     is_featured,
@@ -120,7 +119,6 @@ const createStory = asyncHandler(async (req, res) => {
     full_story,
     thumbnail_url,
     video_url,
-    duration_seconds: duration_seconds ? parseInt(duration_seconds, 10) : null,
     location_id: location_id ? parseInt(location_id, 10) : null,
     vendor_id: vendor_id ? parseInt(vendor_id, 10) : null,
     is_featured: is_featured === true || is_featured === 'true',
@@ -152,7 +150,6 @@ const updateStory = asyncHandler(async (req, res) => {
     full_story,
     thumbnail_url,
     video_url,
-    duration_seconds,
     location_id,
     is_featured,
     is_published
@@ -167,7 +164,6 @@ const updateStory = asyncHandler(async (req, res) => {
   if (full_story !== undefined) updateData.full_story = full_story;
   if (thumbnail_url !== undefined) updateData.thumbnail_url = thumbnail_url;
   if (video_url !== undefined) updateData.video_url = video_url;
-  if (duration_seconds !== undefined) updateData.duration_seconds = parseInt(duration_seconds, 10);
   if (location_id !== undefined) updateData.location_id = location_id ? parseInt(location_id, 10) : null;
   if (is_featured !== undefined) updateData.is_featured = is_featured === true || is_featured === 'true';
   if (is_published !== undefined) updateData.is_published = is_published === true || is_published === 'true';
@@ -192,31 +188,6 @@ const deleteStory = asyncHandler(async (req, res) => {
   await Story.delete(parseInt(id, 10));
 
   return sendSuccess(res, null, 'Story deleted successfully');
-});
-
-/**
- * Set story as primary for vendor (admin)
- * POST /api/admin/stories/:id/set-primary
- */
-const setPrimaryStory = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  const story = await Story.findById(parseInt(id, 10));
-  if (!story) {
-    return sendNotFound(res, 'Story');
-  }
-
-  if (!story.vendor_id) {
-    return sendError(res, 'Historia nuk është e lidhur me një biznes', 'INVALID_REQUEST', 400);
-  }
-
-  const updatedStory = await Story.setPrimary(parseInt(id, 10), story.vendor_id);
-
-  return sendSuccess(res, {
-    story_id: updatedStory.id,
-    vendor_id: updatedStory.vendor_id,
-    is_primary: updatedStory.is_primary_story
-  }, 'Story set as primary for this vendor');
 });
 
 /**
@@ -270,7 +241,6 @@ module.exports = {
   createStory,
   updateStory,
   deleteStory,
-  setPrimaryStory,
   generateQRCode,
   downloadQRCode
 };

@@ -24,6 +24,10 @@ function VendorStoryForm() {
   const [uploadProgress, setUploadProgress] = useState(0)
 
   useEffect(() => {
+    document.title = isEdit ? "n'Bazaar360 - Ndrysho Historinë" : "n'Bazaar360 - Histori e Re"
+  }, [isEdit])
+
+  useEffect(() => {
     if (isEdit) {
       fetchStory()
     }

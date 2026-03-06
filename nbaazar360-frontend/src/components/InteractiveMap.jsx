@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Maximize2, MapPin } from 'lucide-react'
 import { createCustomIcon } from '../utils/customMarkerIcon'
+import { getMediaUrl } from '../services/api'
 import 'leaflet/dist/leaflet.css'
 
 // Pazari i Ri center coordinates
@@ -40,7 +41,7 @@ function InteractiveMap({ locations, onLocationClick }) {
                   {/* Thumbnail - Larger */}
                   {location.thumbnail_url && (
                     <img
-                      src={location.thumbnail_url}
+                      src={getMediaUrl(location.thumbnail_url)}
                       alt={location.name}
                       className="w-full h-48 object-cover rounded-xl mb-5 shadow-md"
                     />

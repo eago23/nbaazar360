@@ -4,47 +4,47 @@ import { MapPin, Phone, Mail } from 'lucide-react'
 function Footer() {
   return (
     <footer className="bg-secondary text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="col-span-2 sm:col-span-2 md:col-span-1 space-y-4">
             <Link to="/" className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-primary rounded flex items-center justify-center">
                 <span className="text-white font-bold text-lg">n'</span>
               </div>
               <span className="font-semibold text-xl">Bazaar360</span>
             </Link>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-sm leading-relaxed">
               Një udhëtim dixhital përmes Pazarit të dashur të Tiranës, duke ruajtur trashëgiminë kulturore përmes teknologjisë së avancuar.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">LIDHJE TË SHPEJTA</h3>
-            <ul className="space-y-2">
+            <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">LIDHJE TË SHPEJTA</h3>
+            <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Kryefaqja
                 </Link>
               </li>
               <li>
-                <Link to="/eksplorimi-360" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/eksplorimi-360" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Eksplorimi 360°
                 </Link>
               </li>
               <li>
-                <Link to="/histori-ar" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/histori-ar" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Histori AR
                 </Link>
               </li>
               <li>
-                <Link to="/ngjarje" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/ngjarje" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Ngjarje
                 </Link>
               </li>
               <li>
-                <Link to="/tregtaret" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/tregtaret" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Bizneset
                 </Link>
               </li>
@@ -53,25 +53,25 @@ function Footer() {
 
           {/* About */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">RRETH NESH</h3>
-            <ul className="space-y-2">
+            <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">RRETH NESH</h3>
+            <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link to="/rreth-nesh" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/rreth-nesh" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Misioni Ynë
                 </Link>
               </li>
               <li>
-                <Link to="/rreth-nesh" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/rreth-nesh" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Trashëgimia Kulturore
                 </Link>
               </li>
               <li>
-                <Link to="/regjistrim" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/regjistrim" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Bashkëpuno me Ne
                 </Link>
               </li>
               <li>
-                <Link to="/politika-e-privatesise" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/politika-e-privatesise" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Politika e Privatësisë
                 </Link>
               </li>
@@ -79,8 +79,8 @@ function Footer() {
           </div>
 
           {/* Contact */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">NA VIZITONI</h3>
+          <div className="col-span-2 sm:col-span-1">
+            <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">NA VIZITONI</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
                 <MapPin size={18} className="text-primary mt-1 flex-shrink-0" />
@@ -88,13 +88,13 @@ function Footer() {
                   Pazari i Ri<br />Tiranë, Shqipëri
                 </span>
               </li>
-              <li className="flex items-center space-x-3">
+              <li className="flex items-center space-x-3 min-h-[44px]">
                 <Phone size={18} className="text-primary flex-shrink-0" />
                 <a href="tel:08000888" className="text-gray-400 hover:text-white transition-colors">
                   0800 0888
                 </a>
               </li>
-              <li className="flex items-center space-x-3">
+              <li className="flex items-center space-x-3 min-h-[44px]">
                 <Mail size={18} className="text-primary flex-shrink-0" />
                 <a href="mailto:info@tirana.al" className="text-gray-400 hover:text-white transition-colors">
                   info@tirana.al
@@ -104,7 +104,7 @@ function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+        <div className="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400 text-xs sm:text-sm">
           <p>&copy; 2026 n'Bazaar360. Të gjitha të drejtat e rezervuara.</p>
         </div>
       </div>

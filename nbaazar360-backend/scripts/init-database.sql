@@ -62,7 +62,7 @@ CREATE TABLE users (
 
     -- Public identity
     username VARCHAR(50) UNIQUE NOT NULL,
-    full_name VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255) NULL DEFAULT NULL,
 
     -- User type and status
     role ENUM('admin', 'vendor', 'guest') DEFAULT 'vendor',
@@ -72,7 +72,7 @@ CREATE TABLE users (
     business_name VARCHAR(255) UNIQUE,
     business_description TEXT,
     phone VARCHAR(50),
-    business_type ENUM('artisan', 'shop', 'restaurant', 'cafe', 'service'),
+    business_type VARCHAR(50),
     address VARCHAR(500),
     location_id INT,
 
@@ -136,20 +136,18 @@ CREATE TABLE panoramas (
 -- ============================================
 CREATE TABLE ar_stories (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,
+    title VARCHAR(255) DEFAULT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
-    artisan_name VARCHAR(255) NOT NULL,
-    profession VARCHAR(255) NOT NULL,
+    artisan_name VARCHAR(255) DEFAULT NULL,
+    profession VARCHAR(255) DEFAULT NULL,
     short_bio VARCHAR(500),
     full_story TEXT,
     thumbnail_url VARCHAR(500),
     video_url VARCHAR(500),
-    duration_seconds INT,
     location_id INT,
     vendor_id INT,
 
     -- QR Code System
-    is_primary_story BOOLEAN DEFAULT false,
     qr_code_url VARCHAR(500),
 
     is_featured BOOLEAN DEFAULT false,
@@ -162,7 +160,6 @@ CREATE TABLE ar_stories (
     FOREIGN KEY (vendor_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_slug (slug),
     INDEX idx_vendor (vendor_id),
-    INDEX idx_primary (is_primary_story, vendor_id),
     INDEX idx_featured (is_featured),
     INDEX idx_published (is_published)
 );
@@ -198,7 +195,7 @@ CREATE TABLE events (
     slug VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     short_description VARCHAR(500),
-    event_type ENUM('festival', 'workshop', 'exhibition', 'performance', 'market') NOT NULL,
+    event_type VARCHAR(50) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE,
     start_time TIME,

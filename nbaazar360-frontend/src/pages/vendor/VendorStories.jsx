@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Edit2, Trash2, Eye, EyeOff, MoreVertical } from 'lucide-react'
-import { vendorStoriesAPI } from '../../services/api'
+import { Plus, Edit2, Trash2, Eye, EyeOff, QrCode } from 'lucide-react'
+import { vendorStoriesAPI, getMediaUrl } from '../../services/api'
+import QRCodeModal from '../../components/QRCodeModal'
 
 function VendorStories() {
   const [stories, setStories] = useState([])
   const [loading, setLoading] = useState(true)
   const [deleteId, setDeleteId] = useState(null)
-  const [actionMenu, setActionMenu] = useState(null)
   const [error, setError] = useState(null)
+  const [showQRModal, setShowQRModal] = useState(false)
+  const [selectedStoryForQR, setSelectedStoryForQR] = useState(null)
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Historitë e Mia"
+  }, [])
 
   useEffect(() => {
     fetchStories()
@@ -35,8 +41,6 @@ function VendorStories() {
     } catch (err) {
       console.error('Error updating story:', err)
       setError(err.response?.data?.message || 'Gabim gjatë përditësimit të historisë')
-    } finally {
-      setActionMenu(null)
     }
   }
 
@@ -51,6 +55,16 @@ function VendorStories() {
       setError(err.response?.data?.message || 'Gabim gjatë fshirjes së historisë')
       setDeleteId(null)
     }
+  }
+
+  const handleViewQRCode = (story) => {
+    setSelectedStoryForQR(story)
+    setShowQRModal(true)
+  }
+
+  const closeQRModal = () => {
+    setShowQRModal(false)
+    setSelectedStoryForQR(null)
   }
 
   return (
@@ -96,7 +110,7 @@ function VendorStories() {
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-3">
                       <img
-                        src={story.thumbnail_url || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
+                        src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
                         alt={story.title}
                         className="w-12 h-12 rounded-lg object-cover"
                       />
@@ -121,50 +135,35 @@ function VendorStories() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="relative inline-block">
+                    <div className="flex items-center justify-end space-x-1">
                       <button
-                        onClick={() => setActionMenu(actionMenu === story.id ? null : story.id)}
-                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        onClick={() => handleViewQRCode(story)}
+                        className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                        title="QR Code"
                       >
-                        <MoreVertical size={20} className="text-gray-500" />
+                        <QrCode size={18} />
                       </button>
-                      {actionMenu === story.id && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-10">
-                          <Link
-                            to={`/tregtar/historite/${story.id}/ndrysho`}
-                            className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-50"
-                          >
-                            <Edit2 size={16} className="text-gray-500" />
-                            <span>Ndrysho</span>
-                          </Link>
-                          <button
-                            onClick={() => handlePublish(story.id, story.is_published)}
-                            className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-50 w-full text-left"
-                          >
-                            {story.is_published ? (
-                              <>
-                                <EyeOff size={16} className="text-gray-500" />
-                                <span>Çpubliko</span>
-                              </>
-                            ) : (
-                              <>
-                                <Eye size={16} className="text-gray-500" />
-                                <span>Publiko</span>
-                              </>
-                            )}
-                          </button>
-                          <button
-                            onClick={() => {
-                              setDeleteId(story.id)
-                              setActionMenu(null)
-                            }}
-                            className="flex items-center space-x-2 px-4 py-2 hover:bg-red-50 text-red-600 w-full text-left"
-                          >
-                            <Trash2 size={16} />
-                            <span>Fshi</span>
-                          </button>
-                        </div>
-                      )}
+                      <Link
+                        to={`/tregtar/historite/${story.id}/ndrysho`}
+                        className="p-2 text-blue-500 hover:bg-blue-100 rounded-lg transition-colors"
+                        title="Ndrysho"
+                      >
+                        <Edit2 size={18} />
+                      </Link>
+                      <button
+                        onClick={() => handlePublish(story.id, story.is_published)}
+                        className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                        title={story.is_published ? 'Çpubliko' : 'Publiko'}
+                      >
+                        {story.is_published ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                      <button
+                        onClick={() => setDeleteId(story.id)}
+                        className="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                        title="Fshi"
+                      >
+                        <Trash2 size={18} />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -213,6 +212,14 @@ function VendorStories() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* QR Code Modal */}
+      {showQRModal && selectedStoryForQR && (
+        <QRCodeModal
+          story={selectedStoryForQR}
+          onClose={closeQRModal}
+        />
       )}
     </div>
   )

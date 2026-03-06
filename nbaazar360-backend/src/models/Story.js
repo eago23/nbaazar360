@@ -40,24 +40,22 @@ const Story = {
     const sql = `
       INSERT INTO ar_stories (
         title, slug, artisan_name, profession, short_bio, full_story,
-        thumbnail_url, video_url, duration_seconds, location_id, vendor_id,
-        is_primary_story, is_featured, is_published, display_order, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+        thumbnail_url, video_url, location_id, vendor_id,
+        is_featured, is_published, display_order, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
 
     const params = [
       title,
       slug,
-      storyData.artisan_name,
-      storyData.profession || '',
-      storyData.short_bio || '',
-      storyData.full_story || '',
+      storyData.artisan_name || null,   // Allow NULL for optional field
+      storyData.profession || null,      // Allow NULL for optional field
+      storyData.short_bio || null,
+      storyData.full_story || null,
       storyData.thumbnail_url || null,
       storyData.video_url || null,
-      storyData.duration_seconds || null,
       storyData.location_id || null,
       storyData.vendor_id || null,
-      storyData.is_primary_story || false,
       storyData.is_featured || false,
       storyData.is_published !== false, // Default to true
       storyData.display_order || 0
@@ -73,8 +71,8 @@ const Story = {
   update: async (id, updateData) => {
     const allowedFields = [
       'title', 'artisan_name', 'profession', 'short_bio', 'full_story',
-      'thumbnail_url', 'video_url', 'duration_seconds', 'location_id',
-      'is_primary_story', 'qr_code_url', 'is_featured', 'is_published', 'display_order'
+      'thumbnail_url', 'video_url', 'location_id',
+      'qr_code_url', 'is_featured', 'is_published', 'display_order'
     ];
 
     const updates = [];
@@ -125,25 +123,6 @@ const Story = {
    */
   incrementViews: async (id) => {
     await query('UPDATE ar_stories SET view_count = view_count + 1 WHERE id = ?', [id]);
-  },
-
-  /**
-   * Set story as primary for vendor
-   */
-  setPrimary: async (id, vendorId) => {
-    // Unset other primaries for this vendor
-    await query(
-      'UPDATE ar_stories SET is_primary_story = 0 WHERE vendor_id = ?',
-      [vendorId]
-    );
-
-    // Set this story as primary
-    await query(
-      'UPDATE ar_stories SET is_primary_story = 1 WHERE id = ?',
-      [id]
-    );
-
-    return Story.findById(id);
   },
 
   /**
@@ -225,7 +204,7 @@ const Story = {
     const total = countResult[0].total;
 
     const sql = `
-      SELECT s.*, u.username as vendor_username, u.business_name
+      SELECT s.*, u.username as vendor_username, u.business_name as vendor_name
       FROM ar_stories s
       LEFT JOIN users u ON s.vendor_id = u.id
       ORDER BY s.created_at DESC
@@ -242,20 +221,9 @@ const Story = {
    */
   getByVendorId: async (vendorId) => {
     return query(
-      'SELECT * FROM ar_stories WHERE vendor_id = ? ORDER BY is_primary_story DESC, created_at DESC',
+      'SELECT * FROM ar_stories WHERE vendor_id = ? ORDER BY created_at DESC',
       [vendorId]
     );
-  },
-
-  /**
-   * Get primary story for vendor
-   */
-  getPrimaryByVendorId: async (vendorId) => {
-    const stories = await query(
-      'SELECT * FROM ar_stories WHERE vendor_id = ? AND is_primary_story = 1 LIMIT 1',
-      [vendorId]
-    );
-    return stories[0] || null;
   },
 
   /**

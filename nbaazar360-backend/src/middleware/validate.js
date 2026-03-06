@@ -34,20 +34,9 @@ const validateVendorSignup = [
     .withMessage('Invalid email format')
     .normalizeEmail(),
 
-  body('username')
-    .isLength({ min: USERNAME.MIN_LENGTH, max: USERNAME.MAX_LENGTH })
-    .withMessage(`Username must be ${USERNAME.MIN_LENGTH}-${USERNAME.MAX_LENGTH} characters`)
-    .matches(USERNAME.PATTERN)
-    .withMessage('Username can only contain lowercase letters, numbers, and underscores'),
-
   body('password')
     .isLength({ min: PASSWORD.MIN_LENGTH })
     .withMessage(`Password must be at least ${PASSWORD.MIN_LENGTH} characters`),
-
-  body('full_name')
-    .notEmpty()
-    .withMessage('Full name is required')
-    .trim(),
 
   body('business_name')
     .notEmpty()
@@ -60,10 +49,6 @@ const validateVendorSignup = [
     .withMessage('Invalid business type'),
 
   body('phone')
-    .optional()
-    .trim(),
-
-  body('address')
     .optional()
     .trim(),
 
@@ -277,44 +262,43 @@ const validateCreateHotspot = [
 // STORY VALIDATIONS
 // ============================================
 
+/**
+ * Admin story creation validation
+ * Required: video_url, full_story (description)
+ * Optional: title, artisan_name
+ */
 const validateCreateStory = [
   body('title')
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim(),
 
   body('artisan_name')
-    .notEmpty()
-    .withMessage('Artisan name is required')
+    .optional({ nullable: true, checkFalsy: true })
     .trim(),
 
   body('profession')
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim(),
 
   body('short_bio')
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isLength({ max: 500 })
     .withMessage('Short bio must be at most 500 characters')
     .trim(),
 
   body('full_story')
-    .optional()
+    .notEmpty()
+    .withMessage('Description (full_story) is required')
     .trim(),
 
   body('video_url')
-    .optional({ nullable: true, checkFalsy: true })
-    .isURL()
-    .withMessage('Invalid video URL'),
+    .notEmpty()
+    .withMessage('Video URL is required')
+    .trim(),
 
   body('thumbnail_url')
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
-    .withMessage('Invalid thumbnail URL'),
-
-  body('duration_seconds')
-    .optional({ nullable: true, checkFalsy: true })
-    .isInt({ min: 0 })
-    .withMessage('Duration must be a positive number'),
+    .trim(),
 
   body('location_id')
     .optional({ nullable: true, checkFalsy: true })
@@ -339,34 +323,71 @@ const validateCreateStory = [
   handleValidationErrors
 ];
 
+/**
+ * Vendor story creation validation
+ * Required: video_url, full_story (description)
+ * Everything else auto-filled from vendor profile
+ */
+const validateVendorCreateStory = [
+  body('full_story')
+    .notEmpty()
+    .withMessage('Description is required')
+    .trim(),
+
+  body('video_url')
+    .notEmpty()
+    .withMessage('Video URL is required')
+    .trim(),
+
+  body('thumbnail_url')
+    .optional({ nullable: true, checkFalsy: true })
+    .trim(),
+
+  body('is_published')
+    .optional()
+    .isBoolean()
+    .withMessage('is_published must be a boolean'),
+
+  handleValidationErrors
+];
+
 const validateUpdateStory = [
+  // Title is optional and can be cleared (null/empty allowed)
   body('title')
-    .optional()
-    .notEmpty()
-    .withMessage('Title cannot be empty')
+    .optional({ nullable: true, checkFalsy: true })
     .trim(),
 
+  // Artisan/Business name is optional and can be cleared
   body('artisan_name')
-    .optional()
-    .notEmpty()
-    .withMessage('Artisan name cannot be empty')
+    .optional({ nullable: true, checkFalsy: true })
     .trim(),
 
+  // Profession is optional and can be cleared
   body('profession')
-    .optional()
-    .notEmpty()
-    .withMessage('Profession cannot be empty')
+    .optional({ nullable: true, checkFalsy: true })
     .trim(),
 
   body('short_bio')
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isLength({ max: 500 })
     .withMessage('Short bio must be at most 500 characters'),
 
+  body('full_story')
+    .optional({ nullable: true, checkFalsy: true })
+    .trim(),
+
   body('video_url')
-    .optional()
-    .isURL()
-    .withMessage('Invalid video URL'),
+    .optional({ nullable: true, checkFalsy: true })
+    .trim(),
+
+  body('thumbnail_url')
+    .optional({ nullable: true, checkFalsy: true })
+    .trim(),
+
+  body('location_id')
+    .optional({ nullable: true, checkFalsy: true })
+    .isInt({ min: 1 })
+    .withMessage('Invalid location ID'),
 
   body('is_featured')
     .optional()
@@ -632,6 +653,7 @@ module.exports = {
   validateCreateHotspot,
   // Story
   validateCreateStory,
+  validateVendorCreateStory,
   validateUpdateStory,
   // Event
   validateCreateEvent,

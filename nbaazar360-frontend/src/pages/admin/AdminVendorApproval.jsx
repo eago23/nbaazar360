@@ -11,6 +11,10 @@ function AdminVendorApproval() {
   const [rejectReason, setRejectReason] = useState('')
 
   useEffect(() => {
+    document.title = "n'Bazaar360 - Miratime Tregtarësh"
+  }, [])
+
+  useEffect(() => {
     fetchPendingVendors()
   }, [])
 

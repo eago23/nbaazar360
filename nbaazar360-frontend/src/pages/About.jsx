@@ -1,7 +1,12 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Navigation, Sparkles, Calendar, Store } from 'lucide-react'
 
 function About() {
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Rreth Nesh"
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header - Same as other pages */}

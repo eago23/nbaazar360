@@ -25,6 +25,10 @@ function AdminEditStory() {
   const [uploadProgress, setUploadProgress] = useState(0)
 
   useEffect(() => {
+    document.title = "n'Bazaar360 - Ndrysho Historinë AR"
+  }, [])
+
+  useEffect(() => {
     fetchStory()
   }, [id])
 

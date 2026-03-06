@@ -30,12 +30,17 @@ function AdminAddEvent() {
   const [error, setError] = useState('')
 
   const eventTypes = [
-    { id: 'festival', label: 'Festival' },
-    { id: 'workshop', label: 'Punëtori' },
-    { id: 'exhibition', label: 'Ekspozitë' },
-    { id: 'performance', label: 'Performancë' },
-    { id: 'market', label: 'Treg' }
+    { id: 'Festival', label: 'Festival' },
+    { id: 'Koncert & Muzikë', label: 'Koncert & Muzikë' },
+    { id: 'Ekspozitë & Art', label: 'Ekspozitë & Art' },
+    { id: 'Teatër & Performancë', label: 'Teatër & Performancë' },
+    { id: 'Treg & Artizanat', label: 'Treg & Artizanat' },
+    { id: 'Workshop', label: 'Workshop' }
   ]
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Shto Ngjarje"
+  }, [])
 
   useEffect(() => {
     fetchLocations()

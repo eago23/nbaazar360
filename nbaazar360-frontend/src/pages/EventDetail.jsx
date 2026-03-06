@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Calendar, Clock, MapPin, Share2, ExternalLink, Users, ChevronRight } from 'lucide-react'
-import { eventsAPI } from '../services/api'
+import { eventsAPI, getMediaUrl } from '../services/api'
 
 function EventDetail() {
   const { id } = useParams()
@@ -13,6 +13,14 @@ function EventDetail() {
   useEffect(() => {
     fetchEvent()
   }, [id])
+
+  useEffect(() => {
+    if (event?.title) {
+      document.title = `n'Bazaar360 - ${event.title}`
+    } else {
+      document.title = "n'Bazaar360 - Ngjarje"
+    }
+  }, [event])
 
   const fetchEvent = async () => {
     try {
@@ -142,7 +150,7 @@ function EventDetail() {
             {/* Event Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-lg">
               <img
-                src={event.banner_url || event.thumbnail_url || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800'}
+                src={getMediaUrl(event.banner_url) || getMediaUrl(event.thumbnail_url) || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800'}
                 alt={event.title}
                 className="w-full h-72 md:h-80 object-cover"
               />
@@ -285,7 +293,7 @@ function EventDetail() {
                       className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
                     >
                       <img
-                        src={relEvent.thumbnail_url || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=100'}
+                        src={getMediaUrl(relEvent.thumbnail_url) || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=100'}
                         alt={relEvent.title}
                         className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                       />

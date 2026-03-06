@@ -12,14 +12,11 @@ const logger = require('../utils/logger');
 const vendorSignup = asyncHandler(async (req, res) => {
   const {
     email,
-    username,
     password,
-    full_name,
     business_name,
     business_description,
     phone,
     business_type,
-    address,
     about,
     contact_info,
     terms_accepted
@@ -31,16 +28,19 @@ const vendorSignup = asyncHandler(async (req, res) => {
     return sendValidationError(res, [{ field: 'email', message: 'Ky email është i regjistruar tashmë' }]);
   }
 
-  // Check if username already exists
-  const usernameExists = await User.usernameExists(username);
-  if (usernameExists) {
-    return sendValidationError(res, [{ field: 'username', message: 'Ky emër përdoruesi është i zënë' }]);
-  }
-
   // Check if business name already exists
   const businessNameExists = await User.businessNameExists(business_name);
   if (businessNameExists) {
     return sendValidationError(res, [{ field: 'business_name', message: 'Ky emër biznesi është i regjistruar tashmë' }]);
+  }
+
+  // Auto-generate username from email
+  const baseUsername = email.split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g, '_');
+  let username = baseUsername;
+  let counter = 1;
+  while (await User.usernameExists(username)) {
+    username = `${baseUsername}_${counter}`;
+    counter++;
   }
 
   // Handle file uploads - files are saved locally by multer
@@ -66,12 +66,10 @@ const vendorSignup = asyncHandler(async (req, res) => {
     email,
     username,
     password,
-    full_name,
     business_name,
     business_description: business_description || null,
     phone: phone || null,
     business_type: business_type || null,
-    address: address || null,
     about: about || null,
     contact_info: contact_info || null,
     terms_accepted: terms_accepted === 'true' || terms_accepted === true,
@@ -87,21 +85,17 @@ const vendorSignup = asyncHandler(async (req, res) => {
   try {
     await notifyAdminNewVendor({
       email,
-      username,
-      full_name,
       business_name,
       business_type: business_type || 'N/A',
-      phone,
-      address
+      phone
     });
   } catch (emailError) {
     logger.warn('Admin notification failed', { error: emailError.message });
   }
 
-  logger.info('New vendor signup', { username, business_name });
+  logger.info('New vendor signup', { email, business_name });
 
   return sendSuccess(res, {
-    username: vendor.username,
     business_name: vendor.business_name,
     status: vendor.status
   }, 'Regjistrimi u krye me sukses! Do të njoftoheni me email kur llogaria juaj të shqyrtohet.', 201);

@@ -165,8 +165,8 @@ const Event = {
     const countResult = await query(countSql, params);
     const total = countResult[0].total;
 
-    // Add sorting and pagination
-    sql += ` ORDER BY start_date ASC, start_time ASC`;
+    // Add sorting and pagination (newest/upcoming first, oldest last)
+    sql += ` ORDER BY start_date DESC, start_time DESC`;
     sql += ` LIMIT ? OFFSET ?`;
     params.push(limit, (page - 1) * limit);
 

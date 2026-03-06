@@ -300,8 +300,8 @@ INSERT INTO users (
 -- ============================================
 INSERT INTO ar_stories (
     title, slug, artisan_name, profession, short_bio, full_story,
-    video_url, duration_seconds, location_id, vendor_id,
-    is_primary_story, is_featured, is_published, created_at
+    video_url, location_id, vendor_id,
+    is_featured, is_published, created_at
 ) VALUES
 (
     'Arti i Punimit të Bakrit',
@@ -311,10 +311,8 @@ INSERT INTO ar_stories (
     'Tre breza të punës së bakrit të familjes Gjini.',
     'Historia e familjes Gjini fillon në vitet 1960 kur gjyshi im filloi të punojë bakrin në dyqanin e tij të vogël në Tiranë. Teknikat që ai përdorte ishin të trashëguara nga zejtarë të vjetër otomanë. Babai im vazhdoi këtë traditë dhe më mësoi mua çdo sekret të zanatit. Sot, unë dhe djali im punojmë së bashku, duke ruajtur këtë art për brezat e ardhshëm. Çdo copë që krijohet këtu ka shpirt dhe histori.',
     'https://sample-videos.com/agim-gjini-bakri.mp4',
-    180,
     2,
     2,
-    true,
     true,
     true,
     NOW()
@@ -327,10 +325,8 @@ INSERT INTO ar_stories (
     'Teknikat e thurjes nga veriu i Shqipërisë.',
     'Gjyshja ime më mësoi të thurë kur isha 8 vjeç. Ajo thurte qilima për familjen dhe fqinjët në fshatin tonë në Shkodër. Motivet që përdorim kanë kuptim - çdo ngjyrë dhe formë tregon diçka: malin, lumin, diellin. Ngjyrat i nxjerrim nga bimët: kafe nga lëvozhgat e arrës, blu nga indigo, kuq nga lëkura e qepës. Një qilim mund të më marrë dy muaj, por ai do të zgjasë një jetë të tërë.',
     'https://sample-videos.com/fatmir-shehu-thurje.mp4',
-    210,
     2,
     3,
-    true,
     true,
     true,
     NOW()
@@ -343,10 +339,8 @@ INSERT INTO ar_stories (
     'Poçeri të bëra me argjilë nga Liqeni i Shkodrës.',
     'Argjila që përdorim vjen nga brigjet e Liqenit të Shkodrës, e njëjta argjilë që përdornin paraardhësit tanë shekuj më parë. E sjellim, e lajmë, e lëmë të thahet pikërisht sa duhet. Rrotën e kam nga babai im, dhe ai nga i ati. Kur punon argjilën, duhet të ndjesh se si ajo të drejton duart. Nuk je ti që e formon argjilën, por argjila që të formon ty.',
     'https://sample-videos.com/luan-hoxha-poceri.mp4',
-    195,
     2,
     4,
-    true,
     false,
     true,
     NOW()
@@ -359,10 +353,8 @@ INSERT INTO ar_stories (
     'Rrugëtimi i produkteve nga fshati në Tiranë.',
     'Çdo mëngjes në orën 4, ne nisemi nga fshati me kamionin plot me perime. I kemi mbjellë vetë, pa pleh kimik, pa pesticide. Domatet e kuqe janë nga farat që gjyshja ime ruante çdo vit. Trungujtë janë të ëmbël sepse toka jonë është e pasur. Kur një klient të thotë "Kjo domate ka shijes si ato të dikurshme", atëherë di që punën e ke bërë mirë.',
     'https://sample-videos.com/ardian-kola-ferma.mp4',
-    165,
     3,
     5,
-    true,
     false,
     true,
     NOW()
@@ -375,10 +367,8 @@ INSERT INTO ar_stories (
     'Sekretet e kafes së zezë shqiptare.',
     'Kafja e zezë është më shumë se pije - është ritual. Recetën e kam nga gjyshja ime që e mbante një kafe të vogël në qytet. Kafja duhet të vlojë ngadalë, jo shpejt. Duhet të aromë shtëpinë. Dhe kur e servirësh, duhet të jetë me shkumë të trashë sipermas. Ne e shoqërojmë me bakllava që bëjmë çdo mëngjes. Klientët vijnë jo vetëm për kafen, por për atmosferën e ngrohtë, për bisedën.',
     'https://sample-videos.com/elona-rama-kafe.mp4',
-    175,
     4,
     6,
-    true,
     true,
     true,
     NOW()

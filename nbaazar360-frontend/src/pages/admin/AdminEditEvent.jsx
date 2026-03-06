@@ -33,12 +33,17 @@ function AdminEditEvent() {
   const [error, setError] = useState('')
 
   const eventTypes = [
-    { id: 'festival', label: 'Festival' },
-    { id: 'workshop', label: 'Punetori' },
-    { id: 'exhibition', label: 'Ekspozite' },
-    { id: 'performance', label: 'Performace' },
-    { id: 'market', label: 'Treg' }
+    { id: 'Festival', label: 'Festival' },
+    { id: 'Koncert & Muzikë', label: 'Koncert & Muzikë' },
+    { id: 'Ekspozitë & Art', label: 'Ekspozitë & Art' },
+    { id: 'Teatër & Performancë', label: 'Teatër & Performancë' },
+    { id: 'Treg & Artizanat', label: 'Treg & Artizanat' },
+    { id: 'Workshop', label: 'Workshop' }
   ]
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Ndrysho Ngjarjen"
+  }, [])
 
   useEffect(() => {
     fetchLocations()

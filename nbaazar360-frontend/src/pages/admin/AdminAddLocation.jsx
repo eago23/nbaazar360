@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Save, ArrowLeft, AlertCircle, Upload } from 'lucide-react'
 import { adminLocationsAPI, uploadAPI } from '../../services/api'
 
 function AdminAddLocation() {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Shto Vendndodhje"
+  }, [])
 
   const [formData, setFormData] = useState({
     name: '',

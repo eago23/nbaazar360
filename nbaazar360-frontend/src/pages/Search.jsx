@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Search as SearchIcon, MapPin, Calendar, BookOpen, Store, ArrowLeft } from 'lucide-react'
-import { vendorsAPI, storiesAPI, eventsAPI, locationsAPI } from '../services/api'
+import { vendorsAPI, storiesAPI, eventsAPI, locationsAPI, getMediaUrl } from '../services/api'
 
 function Search() {
   const [searchParams] = useSearchParams()
@@ -23,6 +23,10 @@ function Search() {
     { id: 'events', label: 'Ngjarje', icon: Calendar },
     { id: 'locations', label: 'Vendndodhje', icon: MapPin }
   ]
+
+  useEffect(() => {
+    document.title = query ? `n'Bazaar360 - Kërko: ${query}` : "n'Bazaar360 - Kërko"
+  }, [query])
 
   useEffect(() => {
     if (query) {
@@ -199,7 +203,7 @@ function Search() {
                           className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
                         >
                           <img
-                            src={story.thumbnail_url || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=400'}
+                            src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=400'}
                             alt={story.title}
                             className="w-full h-40 object-cover"
                           />
@@ -266,7 +270,7 @@ function Search() {
                           className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
                         >
                           <img
-                            src={location.thumbnail_url || 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400'}
+                            src={getMediaUrl(location.thumbnail_url) || 'https://pikark.com/wp-content/uploads/listing-uploads/gallery/2020/12/Pazari-i-ri-Tirane-atelier4-studio_01.png'}
                             alt={location.name}
                             className="w-full h-40 object-cover"
                           />

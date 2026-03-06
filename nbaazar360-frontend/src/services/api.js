@@ -1,6 +1,26 @@
 import axios from 'axios'
 
 const API_URL = 'http://localhost:5000/api'
+const BACKEND_URL = 'http://localhost:5000'
+
+/**
+ * Convert a relative media URL to an absolute URL
+ * @param {string} url - The URL to convert (e.g., "/uploads/stories/video.mp4")
+ * @returns {string} - The absolute URL (e.g., "http://localhost:5000/uploads/stories/video.mp4")
+ */
+export const getMediaUrl = (url) => {
+  if (!url) return null
+  // If already absolute URL (http/https), return as is
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+  // If relative URL starting with /, prepend backend URL
+  if (url.startsWith('/')) {
+    return `${BACKEND_URL}${url}`
+  }
+  // Otherwise return as is
+  return url
+}
 
 const api = axios.create({
   baseURL: API_URL,

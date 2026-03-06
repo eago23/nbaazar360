@@ -81,7 +81,6 @@ const getVendorProfile = asyncHandler(async (req, res) => {
         slug: s.slug,
         thumbnail_url: s.thumbnail_url,
         video_url: s.video_url,
-        is_primary_story: s.is_primary_story,
         view_count: s.view_count
       }));
   } catch (storiesError) {
@@ -237,7 +236,7 @@ const approveVendor = asyncHandler(async (req, res) => {
     await sendVendorApprovalEmail({
       email: approvedVendor.email,
       username: approvedVendor.username,
-      full_name: approvedVendor.full_name
+      business_name: approvedVendor.business_name
     });
   } catch (emailError) {
     logger.warn('Approval email failed', { error: emailError.message });
@@ -281,7 +280,7 @@ const rejectVendor = asyncHandler(async (req, res) => {
     await sendVendorRejectionEmail(
       {
         email: rejectedVendor.email,
-        full_name: rejectedVendor.full_name
+        business_name: rejectedVendor.business_name
       },
       reason
     );
@@ -520,35 +519,29 @@ const getOwnStories = asyncHandler(async (req, res) => {
  * Create story (vendor)
  * POST /api/vendor/stories
  * Only requires: video_url, full_story (description)
- * Auto-fills: artisan_name from business_name, title from business_name
+ * Auto-fills: title from business_name (artisan_name left null to avoid duplicates)
  */
 const createOwnStory = asyncHandler(async (req, res) => {
   const vendor = await User.findById(req.user.id);
 
   const {
-    title,
-    artisan_name,
-    profession,
-    short_bio,
     full_story,
     thumbnail_url,
     video_url,
-    duration_seconds,
     is_published
   } = req.body;
 
-  // Auto-fill from vendor profile
+  // Auto-fill title from vendor profile (artisan_name intentionally left null)
   const businessName = vendor.business_name || vendor.full_name || 'Artisan';
 
   const storyData = {
-    title: title || businessName,
-    artisan_name: artisan_name || businessName,
-    profession: profession || '',
-    short_bio: short_bio || (full_story ? full_story.substring(0, 150) : ''),
+    title: businessName,
+    artisan_name: null,  // Don't auto-fill to avoid duplicate name display
+    profession: null,
+    short_bio: full_story ? full_story.substring(0, 150) : '',
     full_story: full_story || '',
     thumbnail_url: thumbnail_url || null,
     video_url: video_url || null,
-    duration_seconds: duration_seconds ? parseInt(duration_seconds) : null,
     location_id: vendor.location_id,
     vendor_id: req.user.id,
     is_published: is_published !== false && is_published !== 'false'
@@ -584,7 +577,6 @@ const updateOwnStory = asyncHandler(async (req, res) => {
     full_story,
     thumbnail_url,
     video_url,
-    duration_seconds,
     is_published
   } = req.body;
 
@@ -597,7 +589,6 @@ const updateOwnStory = asyncHandler(async (req, res) => {
   if (full_story !== undefined) updateData.full_story = full_story;
   if (thumbnail_url !== undefined) updateData.thumbnail_url = thumbnail_url;
   if (video_url !== undefined) updateData.video_url = video_url;
-  if (duration_seconds !== undefined) updateData.duration_seconds = parseInt(duration_seconds);
   if (is_published !== undefined) updateData.is_published = is_published === true || is_published === 'true';
 
   const updatedStory = await Story.update(parseInt(id), updateData);
@@ -625,31 +616,6 @@ const deleteOwnStory = asyncHandler(async (req, res) => {
   await Story.delete(parseInt(id));
 
   return sendSuccess(res, null, 'Story deleted successfully');
-});
-
-/**
- * Set primary story (vendor)
- * POST /api/vendor/stories/:id/set-primary
- */
-const setOwnPrimaryStory = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-
-  const story = await Story.findById(parseInt(id));
-  if (!story) {
-    return sendNotFound(res, 'Story');
-  }
-
-  // Check ownership
-  if (story.vendor_id !== req.user.id) {
-    return sendError(res, 'Kjo histori nuk ju përket', 'FORBIDDEN', 403);
-  }
-
-  const updatedStory = await Story.setPrimary(parseInt(id), req.user.id);
-
-  return sendSuccess(res, {
-    story_id: updatedStory.id,
-    is_primary: updatedStory.is_primary_story
-  }, 'This story is now your primary story. Request QR code generation from admin.');
 });
 
 /**
@@ -684,6 +650,5 @@ module.exports = {
   createOwnStory,
   updateOwnStory,
   deleteOwnStory,
-  setOwnPrimaryStory,
   getOwnAnalytics
 };

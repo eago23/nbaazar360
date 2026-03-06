@@ -68,7 +68,6 @@ router.get('/stories', validatePagination, storyController.getAllStories);
 router.post('/stories', validateCreateStory, storyController.createStory);
 router.put('/stories/:id', validateIdParam, validateUpdateStory, storyController.updateStory);
 router.delete('/stories/:id', validateIdParam, storyController.deleteStory);
-router.post('/stories/:id/set-primary', validateIdParam, storyController.setPrimaryStory);
 router.post('/stories/:id/generate-qr', validateIdParam, storyController.generateQRCode);
 router.get('/stories/:id/qr-code', validateIdParam, storyController.downloadQRCode);
 

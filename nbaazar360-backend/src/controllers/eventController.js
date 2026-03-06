@@ -23,7 +23,7 @@ const getPublishedEvents = asyncHandler(async (req, res) => {
     limit: Math.min(parseInt(limit, 10), PAGINATION.MAX_LIMIT),
     event_type: type,
     featured: featured === 'true',
-    upcoming: true,
+    upcoming: false,  // Show all events including past ones
     search: search || null
   });
 

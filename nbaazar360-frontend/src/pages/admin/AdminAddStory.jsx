@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Save, ArrowLeft, AlertCircle, Upload, Video, CheckCircle } from 'lucide-react'
 import { adminStoriesAPI, uploadAPI } from '../../services/api'
 
 function AdminAddStory() {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Shto Histori AR"
+  }, [])
 
   const [formData, setFormData] = useState({
     title: '',           // NEW - Story title (optional)

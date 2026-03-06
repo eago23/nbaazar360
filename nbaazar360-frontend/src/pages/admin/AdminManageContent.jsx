@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Plus, Edit2, Trash2, Eye, MapPin, BookOpen, Calendar, Search } from 'lucide-react'
+import { Plus, Edit2, Trash2, Eye, MapPin, BookOpen, Calendar, Search, QrCode } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { adminStoriesAPI, adminLocationsAPI, adminEventsAPI } from '../../services/api'
+import { adminStoriesAPI, adminLocationsAPI, adminEventsAPI, getMediaUrl } from '../../services/api'
+import QRCodeModal from '../../components/QRCodeModal'
 
 function AdminManageContent() {
   const [activeTab, setActiveTab] = useState('stories')
@@ -11,12 +12,18 @@ function AdminManageContent() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [deleteModal, setDeleteModal] = useState(null)
+  const [showQRModal, setShowQRModal] = useState(false)
+  const [selectedStoryForQR, setSelectedStoryForQR] = useState(null)
 
   const tabs = [
     { id: 'stories', label: 'Histori AR', icon: BookOpen },
     { id: 'locations', label: 'Vendndodhje', icon: MapPin },
     { id: 'events', label: 'Ngjarje', icon: Calendar }
   ]
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Menaxho Përmbajtjen"
+  }, [])
 
   useEffect(() => {
     fetchContent()
@@ -71,6 +78,16 @@ function AdminManageContent() {
     }
   }
 
+  const handleViewQRCode = (story) => {
+    setSelectedStoryForQR(story)
+    setShowQRModal(true)
+  }
+
+  const closeQRModal = () => {
+    setShowQRModal(false)
+    setSelectedStoryForQR(null)
+  }
+
   const getCurrentData = () => {
     let data = []
     switch (activeTab) {
@@ -122,13 +139,13 @@ function AdminManageContent() {
                 >
                   <div className="flex items-start space-x-3">
                     <img
-                      src={story.thumbnail_url || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
+                      src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
                       alt=""
                       className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover flex-shrink-0"
                     />
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-secondary text-sm sm:text-base truncate">{story.title}</h4>
-                      <p className="text-xs sm:text-sm text-gray-500 truncate">{story.vendor_name || story.artisan_name || 'Anonim'}</p>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">{story.artisan_name || story.vendor_name || 'Anonim'}</p>
                       <div className="flex items-center flex-wrap gap-1.5 mt-1.5">
                         <span className={`inline-block px-2 py-0.5 rounded-full text-xs ${
                           Boolean(story.is_published) ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
@@ -146,6 +163,14 @@ function AdminManageContent() {
                   </div>
                 </Link>
                 <div className="flex justify-end space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 sm:py-3 border-t bg-gray-50">
+                  <button
+                    onClick={() => handleViewQRCode(story)}
+                    className="flex-1 sm:flex-none flex items-center justify-center space-x-1 p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm"
+                    title="Gjenero QR Code"
+                  >
+                    <QrCode size={16} />
+                    <span className="sm:hidden">QR</span>
+                  </button>
                   <Link
                     to={`/admin/histori/${story.id}/ndrysho`}
                     className="flex-1 sm:flex-none flex items-center justify-center space-x-1 p-2 text-blue-500 hover:bg-blue-100 rounded-lg transition-colors text-sm"
@@ -172,7 +197,7 @@ function AdminManageContent() {
             {data.map(location => (
               <div key={location.id} className="bg-white rounded-lg border-2 border-gray-200 overflow-hidden hover:border-primary transition-colors">
                 <img
-                  src={location.thumbnail_url || location.panorama_url || 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400'}
+                  src={getMediaUrl(location.thumbnail_url) || getMediaUrl(location.panorama_url) || 'https://pikark.com/wp-content/uploads/listing-uploads/gallery/2020/12/Pazari-i-ri-Tirane-atelier4-studio_01.png'}
                   alt=""
                   className="w-full h-28 sm:h-32 object-cover"
                 />
@@ -229,7 +254,7 @@ function AdminManageContent() {
                   className="block"
                 >
                   <img
-                    src={event.thumbnail_url || event.banner_url || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400'}
+                    src={getMediaUrl(event.thumbnail_url) || getMediaUrl(event.banner_url) || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400'}
                     alt=""
                     className="w-full h-28 sm:h-32 object-cover"
                   />
@@ -377,6 +402,14 @@ function AdminManageContent() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* QR Code Modal */}
+      {showQRModal && selectedStoryForQR && (
+        <QRCodeModal
+          story={selectedStoryForQR}
+          onClose={closeQRModal}
+        />
       )}
     </div>
   )

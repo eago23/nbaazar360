@@ -11,12 +11,16 @@ function Vendors() {
 
   const categories = [
     { id: 'all', label: 'Të gjitha' },
-    { id: 'artisan', label: 'Artizanat' },
-    { id: 'shop', label: 'Dyqan' },
-    { id: 'restaurant', label: 'Restorant' },
-    { id: 'cafe', label: 'Kafe & Bar' },
-    { id: 'service', label: 'Shërbime' }
+    { id: 'Restorant', label: 'Restorant' },
+    { id: 'Kafe & Bar', label: 'Kafe & Bar' },
+    { id: 'Artizanat & Suvenire', label: 'Artizanat & Suvenire' },
+    { id: 'Prodhime Vendore', label: 'Prodhime Vendore' },
+    { id: 'Dyqan', label: 'Dyqan' }
   ]
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Bizneset"
+  }, [])
 
   useEffect(() => {
     fetchVendors()
@@ -111,7 +115,7 @@ function Vendors() {
                 >
                   <div className="relative h-48">
                     <img
-                      src={vendor.cover_url || vendor.logo_url || 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=400'}
+                      src={vendor.cover_url || vendor.logo_url || 'https://pikark.com/wp-content/uploads/listing-uploads/gallery/2020/12/Pazari-i-ri-Tirane-atelier4-studio_01.png'}
                       alt={vendor.business_name}
                       className="w-full h-full object-cover"
                     />

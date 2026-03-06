@@ -7,7 +7,8 @@ const { uploadLogo, uploadCover, uploadImage, uploadVideo, handleUploadError } =
 const {
   validateIdParam,
   validateUpdateVendorProfile,
-  validateUpdateStory
+  validateUpdateStory,
+  validateVendorCreateStory
 } = require('../middleware/validate');
 
 // Apply authentication and vendor check to all routes
@@ -76,7 +77,7 @@ router.get('/stories', vendorController.getOwnStories);
  * @desc Create story about self (only needs video + description)
  * @access Vendor
  */
-router.post('/stories', vendorController.createOwnStory);
+router.post('/stories', validateVendorCreateStory, vendorController.createOwnStory);
 
 /**
  * @route PUT /api/vendor/stories/:id
@@ -91,13 +92,6 @@ router.put('/stories/:id', validateIdParam, validateUpdateStory, vendorControlle
  * @access Vendor
  */
 router.delete('/stories/:id', validateIdParam, vendorController.deleteOwnStory);
-
-/**
- * @route POST /api/vendor/stories/:id/set-primary
- * @desc Set story as primary (for QR code)
- * @access Vendor
- */
-router.post('/stories/:id/set-primary', validateIdParam, vendorController.setOwnPrimaryStory);
 
 /**
  * @route GET /api/vendor/analytics

@@ -1,7 +1,11 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Compass, BookOpen, Calendar, Store, Navigation, Facebook, Instagram } from 'lucide-react'
 
 function Home() {
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Kryefaqja"
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -148,13 +152,13 @@ function Home() {
             {/* Card 3: Events */}
             <Link to="/ngjarje" className="group">
               <div className="relative h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
-                {/* Background Image with Overlay - Download from Instagram and save to public/images/ */}
+                {/* Background Image with Overlay */}
                 <img
-                  src="/images/events-card.jpg"
-                  alt="Events"
+                  src="https://tirana.al/uploads/2023/12/20231205135055_rona-6.jpg"
+                  alt="Ngjarje"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-green-900/90 via-green-800/50 to-green-700/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
 
                 {/* Content */}
                 <div className="relative h-full flex flex-col justify-between p-6">
@@ -180,10 +184,10 @@ function Home() {
             {/* Card 4: Businesses */}
             <Link to="/tregtaret" className="group">
               <div className="relative h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
-                {/* Background Image with Overlay - Download from Instagram and save to public/images/ */}
+                {/* Background Image with Overlay */}
                 <img
-                  src="/images/business-card.jpg"
-                  alt="Businesses"
+                  src="https://c7.alamy.com/comp/2A9D4PM/new-market-pazari-i-ri-tirana-albania-2A9D4PM.jpg"
+                  alt="Bizneset"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />

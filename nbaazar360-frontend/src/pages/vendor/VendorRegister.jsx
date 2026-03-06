@@ -1,21 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { Eye, EyeOff, Store, AlertCircle, CheckCircle } from 'lucide-react'
 import { getErrorMessage, ERROR_MESSAGES } from '../../utils/errorMessages'
 
 function VendorRegister() {
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Regjistrohu"
+  }, [])
+
   const [formData, setFormData] = useState({
-    username: '',
-    full_name: '',
     business_name: '',
     email: '',
     password: '',
     confirmPassword: '',
     phone: '',
-    address: '',
     business_type: '',
-    business_description: '',
     terms_accepted: false
   })
   const [showPassword, setShowPassword] = useState(false)
@@ -27,11 +27,11 @@ function VendorRegister() {
   const navigate = useNavigate()
 
   const categories = [
-    { id: 'artisan', label: 'Artizanat' },
-    { id: 'shop', label: 'Dyqan' },
-    { id: 'restaurant', label: 'Restorant' },
-    { id: 'cafe', label: 'Kafe & Bar' },
-    { id: 'service', label: 'Shërbime' }
+    { id: 'Restorant', label: 'Restorant' },
+    { id: 'Kafe & Bar', label: 'Kafe & Bar' },
+    { id: 'Artizanat & Suvenire', label: 'Artizanat & Suvenire' },
+    { id: 'Prodhime Vendore', label: 'Prodhime Vendore' },
+    { id: 'Dyqan', label: 'Dyqan' }
   ]
 
   const handleChange = (e) => {
@@ -62,15 +62,11 @@ function VendorRegister() {
 
     try {
       await register({
-        username: formData.username,
-        full_name: formData.full_name,
         business_name: formData.business_name,
         email: formData.email,
         password: formData.password,
         phone: formData.phone,
-        address: formData.address,
         business_type: formData.business_type,
-        business_description: formData.business_description,
         terms_accepted: 'true'
       })
       setSuccess(true)
@@ -131,40 +127,6 @@ function VendorRegister() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Username and Full Name */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="username" className="block text-sm font-medium text-secondary mb-2">
-                  Emri i Përdoruesit *
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="p.sh. artizanat_shqiptare"
-                />
-              </div>
-              <div>
-                <label htmlFor="full_name" className="block text-sm font-medium text-secondary mb-2">
-                  Emri i Plotë *
-                </label>
-                <input
-                  id="full_name"
-                  name="full_name"
-                  type="text"
-                  value={formData.full_name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="p.sh. Artan Hoxha"
-                />
-              </div>
-            </div>
-
             {/* Business Name */}
             <div>
               <label htmlFor="business_name" className="block text-sm font-medium text-secondary mb-2">
@@ -278,38 +240,6 @@ function VendorRegister() {
               </div>
             </div>
 
-            {/* Address */}
-            <div>
-              <label htmlFor="address" className="block text-sm font-medium text-secondary mb-2">
-                Vendndodhja në Pazar
-              </label>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                value={formData.address}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="p.sh. Rruga kryesore, Stenda 15"
-              />
-            </div>
-
-            {/* Business Description */}
-            <div>
-              <label htmlFor="business_description" className="block text-sm font-medium text-secondary mb-2">
-                Përshkrimi i Biznesit
-              </label>
-              <textarea
-                id="business_description"
-                name="business_description"
-                value={formData.business_description}
-                onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
-                placeholder="Tregoni për biznesin tuaj, produktet dhe historinë..."
-              />
-            </div>
-
             {/* Terms & Conditions */}
             <div className="flex items-start space-x-3">
               <input
@@ -321,7 +251,7 @@ function VendorRegister() {
                 className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
               />
               <label htmlFor="terms_accepted" className="text-sm text-gray-600">
-                Pranoj <span className="text-primary hover:text-primary-dark cursor-pointer">kushtet dhe termat</span> e përdorimit të platformës *
+                Pranoj <a href="/politika-e-privatesise" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-dark underline">kushtet dhe termat</a> e përdorimit të platformës *
               </label>
             </div>
 

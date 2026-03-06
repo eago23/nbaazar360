@@ -1,6 +1,11 @@
+import { useEffect } from 'react'
 import { Shield, Lock, Eye, Database } from 'lucide-react'
 
 function PrivacyPolicy() {
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Politika e Privatësisë"
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}

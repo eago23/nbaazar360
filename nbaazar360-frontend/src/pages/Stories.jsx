@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Smartphone, QrCode, Camera, Play, Eye } from 'lucide-react'
-import { storiesAPI } from '../services/api'
+import { storiesAPI, getMediaUrl } from '../services/api'
 
 function Stories() {
   const [stories, setStories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Histori AR"
+  }, [])
 
   useEffect(() => {
     fetchStories()
@@ -137,7 +141,7 @@ function Stories() {
                   {/* Thumbnail - Compact */}
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={story.thumbnail_url || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=800'}
+                      src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=800'}
                       alt={story.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -148,13 +152,6 @@ function Stories() {
                         <Play className="text-primary ml-1" size={24} fill="currentColor" />
                       </div>
                     </div>
-
-                    {/* Duration Badge */}
-                    {story.duration_seconds && (
-                      <div className="absolute top-3 right-3 px-2 py-1 bg-black/80 backdrop-blur-sm rounded-full text-white text-xs font-medium">
-                        {Math.floor(story.duration_seconds / 60)}:{(story.duration_seconds % 60).toString().padStart(2, '0')}
-                      </div>
-                    )}
 
                     {/* Featured Badge */}
                     {story.is_featured && (
@@ -167,16 +164,22 @@ function Stories() {
                   {/* Card Content - Compact */}
                   <div className="p-4">
                     <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors line-clamp-1">
-                      {story.title}
+                      {story.title || story.artisan_name || 'Histori AR'}
                     </h3>
 
-                    {/* Artisan Name */}
-                    {story.artisan_name && (
+                    {/* Artisan Name - Only show if different from title */}
+                    {story.artisan_name && story.title && story.artisan_name !== story.title && (
                       <p className="text-sm text-primary font-medium mb-2">
                         {story.artisan_name}
                         {story.profession && (
                           <span className="text-gray-500 font-normal"> • {story.profession}</span>
                         )}
+                      </p>
+                    )}
+                    {/* Show profession alone if artisan_name equals title or is missing */}
+                    {story.profession && (!story.artisan_name || story.artisan_name === story.title) && (
+                      <p className="text-sm text-gray-500 font-normal mb-2">
+                        {story.profession}
                       </p>
                     )}
 

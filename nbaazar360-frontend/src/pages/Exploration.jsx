@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { MapPin, X, AlertCircle } from 'lucide-react'
-import { locationsAPI } from '../services/api'
+import { locationsAPI, getMediaUrl } from '../services/api'
 import InteractiveMap from '../components/InteractiveMap'
 import '../utils/leafletConfig'
 
@@ -11,6 +11,10 @@ function Exploration() {
   const [showViewer, setShowViewer] = useState(false)
   const [viewerError, setViewerError] = useState('')
   const viewerRef = useRef(null)
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Eksplorimi 360°"
+  }, [])
 
   useEffect(() => {
     fetchLocations()
@@ -110,10 +114,12 @@ function Exploration() {
     }
 
     try {
+      const panoramaFullUrl = getMediaUrl(location.panorama_url)
       console.log('Creating Pannellum viewer...')
+      console.log('Full panorama URL:', panoramaFullUrl)
       viewerRef.current = window.pannellum.viewer('panorama', {
         type: 'equirectangular',
-        panorama: location.panorama_url,
+        panorama: panoramaFullUrl,
         autoLoad: true,
         showControls: true,
         mouseZoom: true,
@@ -213,7 +219,7 @@ function Exploration() {
                       >
                         {location.thumbnail_url && (
                           <img
-                            src={location.thumbnail_url}
+                            src={getMediaUrl(location.thumbnail_url)}
                             alt={location.name}
                             className="w-full h-40 object-cover"
                           />

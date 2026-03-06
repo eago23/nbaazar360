@@ -25,12 +25,16 @@ function VendorProfileEdit() {
   const [success, setSuccess] = useState('')
 
   const categories = [
-    { id: 'artisan', label: 'Artizanat' },
-    { id: 'shop', label: 'Dyqan' },
-    { id: 'restaurant', label: 'Restorant' },
-    { id: 'cafe', label: 'Kafe & Bar' },
-    { id: 'service', label: 'Shërbime' }
+    { id: 'Restorant', label: 'Restorant' },
+    { id: 'Kafe & Bar', label: 'Kafe & Bar' },
+    { id: 'Artizanat & Suvenire', label: 'Artizanat & Suvenire' },
+    { id: 'Prodhime Vendore', label: 'Prodhime Vendore' },
+    { id: 'Dyqan', label: 'Dyqan' }
   ]
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Ndrysho Profilin"
+  }, [])
 
   // Fetch vendor profile data on page load
   useEffect(() => {

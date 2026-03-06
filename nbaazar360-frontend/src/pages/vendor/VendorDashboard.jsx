@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { BookOpen, Eye, Plus, Clock, CheckCircle, AlertCircle, User, Edit } from 'lucide-react'
-import { vendorStoriesAPI } from '../../services/api'
+import { vendorStoriesAPI, getMediaUrl } from '../../services/api'
 
 function VendorDashboard() {
   const { user, isApproved } = useAuth()
@@ -14,6 +14,10 @@ function VendorDashboard() {
     draft: 0,
     views: 0
   })
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Paneli i Biznesit"
+  }, [])
 
   useEffect(() => {
     if (isApproved()) {
@@ -203,7 +207,7 @@ function VendorDashboard() {
                   <div className="flex items-center space-x-4 flex-1">
                     {/* Thumbnail */}
                     <img
-                      src={story.thumbnail_url || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
+                      src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
                       alt={story.title}
                       className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
                     />

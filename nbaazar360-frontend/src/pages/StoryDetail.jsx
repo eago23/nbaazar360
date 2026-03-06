@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
-import { storiesAPI } from '../services/api'
+import { storiesAPI, getMediaUrl } from '../services/api'
 
 function StoryDetail() {
   const { id } = useParams()
@@ -13,6 +13,14 @@ function StoryDetail() {
     fetchStory()
   }, [id])
 
+  useEffect(() => {
+    if (story?.title) {
+      document.title = `n'Bazaar360 - ${story.title}`
+    } else {
+      document.title = "n'Bazaar360 - Histori AR"
+    }
+  }, [story])
+
   const fetchStory = async () => {
     try {
       const response = await storiesAPI.getById(id)
@@ -20,14 +28,14 @@ function StoryDetail() {
       setStory(storyData)
     } catch (error) {
       console.error('Error fetching story:', error)
-      navigate('/histori-ar')
+      navigate(-1) // Go back to previous page on error
     } finally {
       setLoading(false)
     }
   }
 
   const handleClose = () => {
-    navigate('/histori-ar')
+    navigate(-1) // Go back to previous page (works for vendor profile, AR stories, etc.)
   }
 
   // Handle escape key to close modal
@@ -94,17 +102,17 @@ function StoryDetail() {
                 preload="metadata"
                 className="w-full rounded-lg shadow-2xl bg-black"
                 style={{ maxHeight: '60vh' }}
-                poster={story.thumbnail_url}
+                poster={getMediaUrl(story.thumbnail_url)}
                 onLoadedMetadata={(e) => {
                   console.log('Video loaded:', e.target.duration, 'seconds')
                 }}
               >
-                <source src={story.video_url} type="video/mp4" />
+                <source src={getMediaUrl(story.video_url)} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             ) : story.thumbnail_url ? (
               <img
-                src={story.thumbnail_url}
+                src={getMediaUrl(story.thumbnail_url)}
                 alt={story.title}
                 className="w-full rounded-lg shadow-2xl"
                 style={{ maxHeight: '60vh', objectFit: 'contain' }}

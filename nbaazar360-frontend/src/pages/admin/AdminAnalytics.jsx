@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { TrendingUp, Eye, Users, MapPin, Calendar, BookOpen, ArrowUp, ArrowDown } from 'lucide-react'
-import { storiesAPI, locationsAPI, eventsAPI, vendorsAPI } from '../../services/api'
+import { storiesAPI, locationsAPI, eventsAPI, vendorsAPI, getMediaUrl } from '../../services/api'
 
 function AdminAnalytics() {
   const [stats, setStats] = useState({
@@ -14,6 +14,10 @@ function AdminAnalytics() {
   })
   const [topStories, setTopStories] = useState([])
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Analitika"
+  }, [])
 
   useEffect(() => {
     fetchAnalytics()
@@ -138,7 +142,7 @@ function AdminAnalytics() {
                   {index + 1}
                 </span>
                 <img
-                  src={story.thumbnail_url || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
+                  src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100'}
                   alt=""
                   className="w-10 h-10 rounded-lg object-cover"
                 />

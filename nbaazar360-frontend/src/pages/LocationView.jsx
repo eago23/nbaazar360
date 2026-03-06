@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Info, X, ZoomIn, ZoomOut, Maximize } from 'lucide-react'
-import { locationsAPI } from '../services/api'
+import { locationsAPI, getMediaUrl } from '../services/api'
 
 function LocationView() {
   const { id } = useParams()
@@ -14,6 +14,14 @@ function LocationView() {
   useEffect(() => {
     fetchLocation()
   }, [id])
+
+  useEffect(() => {
+    if (location?.name) {
+      document.title = `n'Bazaar360 - ${location.name}`
+    } else {
+      document.title = "n'Bazaar360 - Vendndodhje"
+    }
+  }, [location])
 
   const fetchLocation = async () => {
     try {
@@ -97,7 +105,7 @@ function LocationView() {
         {/* Panorama Image (placeholder for Pannellum) */}
         <div className="w-full h-full bg-gray-800 relative overflow-hidden">
           <img
-            src={location.panorama_url || location.thumbnail_url || 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=2000'}
+            src={getMediaUrl(location.panorama_url) || getMediaUrl(location.thumbnail_url) || 'https://pikark.com/wp-content/uploads/listing-uploads/gallery/2020/12/Pazari-i-ri-Tirane-atelier4-studio_01.png'}
             alt={location.name}
             className="w-full h-full object-cover"
           />

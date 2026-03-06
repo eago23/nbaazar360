@@ -13,13 +13,13 @@ const USER_STATUS = {
   SUSPENDED: 'suspended'
 };
 
-// Business types
+// Business types (Albanian categories)
 const BUSINESS_TYPES = {
-  ARTISAN: 'artisan',
-  SHOP: 'shop',
-  RESTAURANT: 'restaurant',
-  CAFE: 'cafe',
-  SERVICE: 'service'
+  RESTORANT: 'Restorant',
+  KAFE_BAR: 'Kafe & Bar',
+  ARTIZANAT_SUVENIRE: 'Artizanat & Suvenire',
+  PRODHIME_VENDORE: 'Prodhime Vendore',
+  DYQAN: 'Dyqan'
 };
 
 // Hotspot types
@@ -30,13 +30,14 @@ const HOTSPOT_TYPES = {
   STORY: 'story'
 };
 
-// Event types
+// Event types (Albanian categories)
 const EVENT_TYPES = {
-  FESTIVAL: 'festival',
-  WORKSHOP: 'workshop',
-  EXHIBITION: 'exhibition',
-  PERFORMANCE: 'performance',
-  MARKET: 'market'
+  FESTIVAL: 'Festival',
+  KONCERT_MUZIKE: 'Koncert & Muzikë',
+  EKSPOZITE_ART: 'Ekspozitë & Art',
+  TEATER_PERFORMANCE: 'Teatër & Performancë',
+  TREG_ARTIZANAT: 'Treg & Artizanat',
+  WORKSHOP: 'Workshop'
 };
 
 // File types

@@ -82,14 +82,14 @@ const User = {
       userData.email,
       passwordHash,
       userData.username,
-      userData.full_name,
+      userData.full_name || null, // Optional - not collected during registration
       userData.role || 'vendor',
       userData.status || 'pending',
       userData.business_name || null,
       userData.business_description || null,
       userData.phone || null,
       userData.business_type || null,
-      userData.address || null,
+      userData.address || null, // Optional - not collected during registration
       userData.about || null,
       userData.contact_info || null,
       userData.id_document_url || null,

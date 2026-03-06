@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { Eye, EyeOff, LogIn, AlertCircle, X } from 'lucide-react'
 import { getErrorMessage } from '../utils/errorMessages'
 
 function Login() {
+  useEffect(() => {
+    document.title = "n'Bazaar360 - Hyr"
+  }, [])
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -143,15 +147,6 @@ function Login() {
             </p>
           </div>
         </div>
-
-        {/* Demo credentials - Remove in production */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="mt-6 p-4 bg-accent/50 border border-accent-gold/20 rounded-lg">
-            <p className="text-sm text-gray-600 text-center">
-              <strong>Demo (Development only)</strong>
-            </p>
-          </div>
-        )}
       </div>
     </div>
   )

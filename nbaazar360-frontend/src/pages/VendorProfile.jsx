@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, MapPin, Phone, Mail, Globe, Store, BookOpen, Eye, Play, Clock } from 'lucide-react'
-import { vendorsAPI } from '../services/api'
+import { vendorsAPI, getMediaUrl } from '../services/api'
 import { getErrorMessage, ERROR_MESSAGES } from '../utils/errorMessages'
 
 function VendorProfile() {
@@ -14,6 +14,14 @@ function VendorProfile() {
   useEffect(() => {
     fetchVendor()
   }, [id])
+
+  useEffect(() => {
+    if (vendor?.business_name) {
+      document.title = `n'Bazaar360 - ${vendor.business_name}`
+    } else {
+      document.title = "n'Bazaar360 - Biznesi"
+    }
+  }, [vendor])
 
   const fetchVendor = async () => {
     try {
@@ -73,16 +81,16 @@ function VendorProfile() {
   // Calculate total views from stories
   const totalViews = stories.reduce((sum, story) => sum + (story.view_count || 0), 0)
 
-  // Get business type label
+  // Get business type label (supports both old and new category values)
   const getBusinessTypeLabel = (type) => {
-    const types = {
-      'artisan': 'Artizanat',
+    const legacyTypes = {
+      'artisan': 'Artizanat & Suvenire',
       'shop': 'Dyqan',
       'restaurant': 'Restorant',
       'cafe': 'Kafe & Bar',
-      'service': 'Shërbime'
+      'service': 'Dyqan'
     }
-    return types[type] || type
+    return legacyTypes[type] || type
   }
 
   if (loading) {
@@ -111,7 +119,7 @@ function VendorProfile() {
       {/* Hero Section with Cover & Logo */}
       <section className="relative h-72 md:h-80 bg-gray-800">
         <img
-          src={vendor.cover_url || vendor.cover_image_url || 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=2000'}
+          src={vendor.cover_url || vendor.cover_image_url || 'https://pikark.com/wp-content/uploads/listing-uploads/gallery/2020/12/Pazari-i-ri-Tirane-atelier4-studio_01.png'}
           alt=""
           className="w-full h-full object-cover opacity-70"
         />
@@ -197,7 +205,7 @@ function VendorProfile() {
                     >
                       <div className="relative h-48 overflow-hidden">
                         <img
-                          src={story.thumbnail_url || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=400'}
+                          src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=400'}
                           alt={story.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -341,23 +349,6 @@ function VendorProfile() {
                     Nuk ka informacione kontakti
                   </p>
                 )}
-              </div>
-            </div>
-
-            {/* Stats Card */}
-            <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-5">
-                Statistika
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <p className="text-3xl font-bold text-primary">{stories.length}</p>
-                  <p className="text-gray-600 text-sm">Histori</p>
-                </div>
-                <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <p className="text-3xl font-bold text-blue-600">{totalViews}</p>
-                  <p className="text-gray-600 text-sm">Shikime</p>
-                </div>
               </div>
             </div>
           </div>

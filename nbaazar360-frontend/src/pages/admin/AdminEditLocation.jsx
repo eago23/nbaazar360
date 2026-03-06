@@ -29,6 +29,10 @@ function AdminEditLocation() {
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
+    document.title = "n'Bazaar360 - Ndrysho Vendndodhjen"
+  }, [])
+
+  useEffect(() => {
     fetchLocation()
   }, [id])
 

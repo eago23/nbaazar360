@@ -11,6 +11,10 @@ function AdminManageVendors() {
   const [actionMenu, setActionMenu] = useState(null)
 
   useEffect(() => {
+    document.title = "n'Bazaar360 - Menaxho Tregtarët"
+  }, [])
+
+  useEffect(() => {
     fetchVendors()
   }, [statusFilter])
 
