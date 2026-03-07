@@ -277,6 +277,10 @@ const rejectVendor = asyncHandler(async (req, res) => {
 
   // Send rejection email
   try {
+    console.log('[VENDOR REJECTION] About to send rejection email to:', rejectedVendor.email);
+    console.log('[VENDOR REJECTION] VENDOR_EMAIL_NOTIFICATIONS =', process.env.VENDOR_EMAIL_NOTIFICATIONS);
+    console.log('[VENDOR REJECTION] SMTP_USER =', process.env.SMTP_USER || 'NOT SET');
+
     await sendVendorRejectionEmail(
       {
         email: rejectedVendor.email,
@@ -284,7 +288,10 @@ const rejectVendor = asyncHandler(async (req, res) => {
       },
       reason
     );
+
+    console.log('[VENDOR REJECTION] Rejection email sent successfully to:', rejectedVendor.email);
   } catch (emailError) {
+    console.error('[VENDOR REJECTION] Rejection email FAILED:', emailError.message, emailError.stack);
     logger.warn('Rejection email failed', { error: emailError.message });
   }
 

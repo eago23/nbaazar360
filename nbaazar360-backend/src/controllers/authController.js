@@ -22,6 +22,12 @@ const vendorSignup = asyncHandler(async (req, res) => {
     terms_accepted
   } = req.body;
 
+  // Validate email format - requires: user@domain.tld (at least 2 letter TLD)
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!email || !emailRegex.test(email)) {
+    return sendValidationError(res, [{ field: 'email', message: 'Adresa email nuk është e vlefshme' }]);
+  }
+
   // Check if email already exists
   const emailExists = await User.emailExists(email);
   if (emailExists) {

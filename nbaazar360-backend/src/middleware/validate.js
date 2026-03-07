@@ -576,8 +576,7 @@ const validateApproveVendor = [
 
 const validateRejectVendor = [
   body('reason')
-    .notEmpty()
-    .withMessage('Rejection reason is required')
+    .optional({ nullable: true, checkFalsy: true })
     .trim(),
 
   handleValidationErrors

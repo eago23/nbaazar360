@@ -136,7 +136,13 @@ const sendVendorApprovalEmail = async (vendor) => {
  * @param {string} reason - Rejection reason (not displayed in email per user request)
  */
 const sendVendorRejectionEmail = async (vendor, reason) => {
+  console.log('[EMAIL SERVICE] sendVendorRejectionEmail called for:', vendor.email);
+  console.log('[EMAIL SERVICE] VENDOR_EMAIL_NOTIFICATIONS =', process.env.VENDOR_EMAIL_NOTIFICATIONS);
+  console.log('[EMAIL SERVICE] isEmailConfigured() =', isEmailConfigured());
+  console.log('[EMAIL SERVICE] SMTP_USER =', process.env.SMTP_USER || 'NOT SET');
+
   if (process.env.VENDOR_EMAIL_NOTIFICATIONS !== 'true') {
+    console.log('[EMAIL SERVICE] SKIPPING - VENDOR_EMAIL_NOTIFICATIONS is not "true"');
     logger.info(`[EMAIL SKIPPED] Rejection email for ${vendor.email}`);
     return;
   }
@@ -196,7 +202,9 @@ const sendVendorRejectionEmail = async (vendor, reason) => {
     `
   };
 
-  await sendEmail(mailOptions);
+  console.log('[EMAIL SERVICE] Sending rejection email to:', vendor.email);
+  const result = await sendEmail(mailOptions);
+  console.log('[EMAIL SERVICE] Rejection email result:', result ? 'SUCCESS' : 'FAILED');
 };
 
 /**

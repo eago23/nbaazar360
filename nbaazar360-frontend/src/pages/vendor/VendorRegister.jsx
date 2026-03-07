@@ -24,9 +24,9 @@ function VendorRegister() {
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  // Email validation regex - requires valid format with TLD
+  // Email validation regex - requires: user@domain.tld (at least 2 letter TLD)
   const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     return emailRegex.test(email)
   }
 
@@ -301,7 +301,7 @@ function VendorRegister() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || emailError}
               className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
             >
               {loading ? (
