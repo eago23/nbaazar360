@@ -20,8 +20,28 @@ function VendorRegister() {
   })
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  // Email validation regex - requires valid format with TLD
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+    return emailRegex.test(email)
+  }
+
+  const validateEmailField = (email) => {
+    if (!email) {
+      setEmailError('')
+      return true
+    }
+    if (!isValidEmail(email)) {
+      setEmailError('Adresa email nuk është e vlefshme')
+      return false
+    }
+    setEmailError('')
+    return true
+  }
 
   const { register } = useAuth()
   const navigate = useNavigate()
@@ -37,11 +57,28 @@ function VendorRegister() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
+    // Clear email error when user starts typing in email field
+    if (name === 'email') {
+      setEmailError('')
+    }
+  }
+
+  const handleEmailBlur = () => {
+    validateEmailField(formData.email)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+
+    // Email validation
+    if (!formData.email) {
+      setEmailError('Email është i detyrueshëm')
+      return
+    }
+    if (!validateEmailField(formData.email)) {
+      return
+    }
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
@@ -155,10 +192,16 @@ function VendorRegister() {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
+                onBlur={handleEmailBlur}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+                  emailError ? 'border-red-500' : 'border-gray-300'
+                }`}
                 placeholder="emri@email.com"
               />
+              {emailError && (
+                <p className="mt-1 text-sm text-red-600">{emailError}</p>
+              )}
             </div>
 
             {/* Password */}

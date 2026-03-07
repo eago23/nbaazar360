@@ -248,6 +248,8 @@ function AdminEditStory() {
               <video
                 src={videoPreview}
                 controls
+                preload="metadata"
+                poster={thumbnailPreview || undefined}
                 className="w-full h-full object-contain bg-black"
               />
             ) : (

@@ -117,6 +117,9 @@ function Vendors() {
                     <img
                       src={vendor.cover_url || vendor.logo_url || 'https://pikark.com/wp-content/uploads/listing-uploads/gallery/2020/12/Pazari-i-ri-Tirane-atelier4-studio_01.png'}
                       alt={vendor.business_name}
+                      loading="lazy"
+                      width={400}
+                      height={300}
                       className="w-full h-full object-cover"
                     />
                     {vendor.category && (
@@ -131,6 +134,9 @@ function Vendors() {
                         <img
                           src={vendor.logo_url}
                           alt=""
+                          loading="lazy"
+                          width={48}
+                          height={48}
                           className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover flex-shrink-0 border-2 border-white shadow"
                         />
                       ) : (

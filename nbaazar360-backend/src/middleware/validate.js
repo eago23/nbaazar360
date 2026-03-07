@@ -30,8 +30,11 @@ const handleValidationErrors = (req, res, next) => {
 
 const validateVendorSignup = [
   body('email')
-    .isEmail()
-    .withMessage('Invalid email format')
+    .trim()
+    .notEmpty()
+    .withMessage('Email është i detyrueshëm')
+    .isEmail({ require_tld: true, allow_display_name: false })
+    .withMessage('Adresa email nuk është e vlefshme')
     .normalizeEmail(),
 
   body('password')
@@ -61,8 +64,11 @@ const validateVendorSignup = [
 
 const validateLogin = [
   body('email')
-    .isEmail()
-    .withMessage('Invalid email format')
+    .trim()
+    .notEmpty()
+    .withMessage('Email është i detyrueshëm')
+    .isEmail({ require_tld: true, allow_display_name: false })
+    .withMessage('Adresa email nuk është e vlefshme')
     .normalizeEmail(),
 
   body('password')

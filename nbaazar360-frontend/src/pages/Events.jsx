@@ -134,6 +134,9 @@ function Events() {
         <img
           src={getMediaUrl(event.thumbnail_url) || getMediaUrl(event.banner_url) || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800'}
           alt={event.title}
+          loading="lazy"
+          width={400}
+          height={300}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 sm:group-hover:scale-110"
         />
 

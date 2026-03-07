@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 const path = require('path');
 
 const routes = require('./routes');
@@ -60,6 +61,13 @@ const authLimiter = rateLimit({
 });
 
 // ============================================
+// COMPRESSION MIDDLEWARE
+// ============================================
+
+// Compress all responses for faster transfer
+app.use(compression());
+
+// ============================================
 // PARSING MIDDLEWARE
 // ============================================
 
@@ -73,9 +81,19 @@ app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 // STATIC FILE SERVING (Local uploads)
 // ============================================
 
-// Serve uploaded files from /uploads directory
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
-logger.info('Static file serving enabled for /uploads');
+// Serve uploaded files from /uploads directory with cache headers
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads'), {
+  maxAge: '1y', // Cache for 1 year (31536000 seconds)
+  etag: true,
+  lastModified: true,
+  setHeaders: (res, filePath) => {
+    // Set cache headers for images and videos
+    if (filePath.match(/\.(jpg|jpeg|png|gif|webp|mp4|webm|mov)$/i)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
+}));
+logger.info('Static file serving enabled for /uploads with caching');
 
 // ============================================
 // LOGGING MIDDLEWARE

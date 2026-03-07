@@ -83,13 +83,21 @@ const vendorSignup = asyncHandler(async (req, res) => {
 
   // Notify admin of new vendor application
   try {
+    console.log('[VENDOR REGISTRATION] About to send admin notification email for:', business_name);
+    console.log('[VENDOR REGISTRATION] ADMIN_EMAIL_NOTIFICATIONS =', process.env.ADMIN_EMAIL_NOTIFICATIONS);
+    console.log('[VENDOR REGISTRATION] SMTP_USER =', process.env.SMTP_USER || 'NOT SET');
+    console.log('[VENDOR REGISTRATION] ADMIN_EMAIL =', process.env.ADMIN_EMAIL || 'NOT SET');
+
     await notifyAdminNewVendor({
       email,
       business_name,
       business_type: business_type || 'N/A',
       phone
     });
+
+    console.log('[VENDOR REGISTRATION] Admin notification email sent successfully for:', business_name);
   } catch (emailError) {
+    console.error('[VENDOR REGISTRATION] Admin notification email FAILED:', emailError.message);
     logger.warn('Admin notification failed', { error: emailError.message });
   }
 

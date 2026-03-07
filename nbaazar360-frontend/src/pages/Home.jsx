@@ -92,6 +92,9 @@ function Home() {
                 <img
                   src="https://bigsee.eu/wp-content/uploads/2019/03/01_bazaar-tirana.jpg.webp"
                   alt="360° Exploration"
+                  loading="lazy"
+                  width={400}
+                  height={320}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
@@ -124,6 +127,9 @@ function Home() {
                 <img
                   src="https://d10ic2gxw9yhll.cloudfront.net/public/DigitalAsset/d14d127efa8e863acb7c09b916629991/d14d127efa8e863acb7c09b916629991/full/original/0/default.jpeg"
                   alt="AR Stories"
+                  loading="lazy"
+                  width={400}
+                  height={320}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-900/90 via-purple-800/50 to-purple-700/30" />
@@ -156,6 +162,9 @@ function Home() {
                 <img
                   src="https://tirana.al/uploads/2023/12/20231205135055_rona-6.jpg"
                   alt="Ngjarje"
+                  loading="lazy"
+                  width={400}
+                  height={320}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
@@ -188,6 +197,9 @@ function Home() {
                 <img
                   src="https://c7.alamy.com/comp/2A9D4PM/new-market-pazari-i-ri-tirana-albania-2A9D4PM.jpg"
                   alt="Bizneset"
+                  loading="lazy"
+                  width={400}
+                  height={320}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />

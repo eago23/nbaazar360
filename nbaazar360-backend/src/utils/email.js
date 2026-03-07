@@ -32,7 +32,10 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
  * @returns {boolean} Success status
  */
 const sendEmail = async (mailOptions) => {
+  console.log('[EMAIL SERVICE] sendEmail called for:', mailOptions.to, 'Subject:', mailOptions.subject);
+
   if (!isEmailConfigured()) {
+    console.log('[EMAIL SERVICE] SKIPPING - SMTP not configured (SMTP_USER or SMTP_PASS missing)');
     logger.info(`[EMAIL SKIPPED] Would send to: ${mailOptions.to}`, {
       subject: mailOptions.subject
     });
@@ -40,11 +43,14 @@ const sendEmail = async (mailOptions) => {
   }
 
   try {
+    console.log('[EMAIL SERVICE] Attempting to send email via SMTP...');
     const trans = initTransporter();
     await trans.sendMail(mailOptions);
+    console.log('[EMAIL SERVICE] Email sent SUCCESSFULLY to:', mailOptions.to);
     logger.info(`Email sent to ${mailOptions.to}`);
     return true;
   } catch (error) {
+    console.error('[EMAIL SERVICE] Email sending FAILED:', error.message);
     logger.error('Email sending failed', { error: error.message, to: mailOptions.to });
     return false;
   }
@@ -198,7 +204,14 @@ const sendVendorRejectionEmail = async (vendor, reason) => {
  * @param {Object} vendor - Vendor data
  */
 const notifyAdminNewVendor = async (vendor) => {
+  console.log('[EMAIL SERVICE] notifyAdminNewVendor called for:', vendor.business_name);
+  console.log('[EMAIL SERVICE] ADMIN_EMAIL_NOTIFICATIONS =', process.env.ADMIN_EMAIL_NOTIFICATIONS);
+  console.log('[EMAIL SERVICE] isEmailConfigured() =', isEmailConfigured());
+  console.log('[EMAIL SERVICE] SMTP_USER =', process.env.SMTP_USER || 'NOT SET');
+  console.log('[EMAIL SERVICE] ADMIN_EMAIL (recipient) =', process.env.ADMIN_EMAIL || 'NOT SET');
+
   if (process.env.ADMIN_EMAIL_NOTIFICATIONS !== 'true') {
+    console.log('[EMAIL SERVICE] SKIPPING - ADMIN_EMAIL_NOTIFICATIONS is not "true"');
     logger.info(`[EMAIL SKIPPED] Admin notification for new vendor: ${vendor.business_name}`);
     return;
   }

@@ -143,6 +143,9 @@ function Stories() {
                     <img
                       src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=800'}
                       alt={story.title}
+                      loading="lazy"
+                      width={400}
+                      height={300}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
 
