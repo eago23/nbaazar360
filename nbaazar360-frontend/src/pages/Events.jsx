@@ -134,21 +134,21 @@ function Events() {
         <img
           src={getMediaUrl(event.thumbnail_url) || getMediaUrl(event.banner_url) || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800'}
           alt={event.title}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 sm:group-hover:scale-110"
         />
 
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
         {/* Content Overlay - Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 p-5">
+        <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-5">
           {/* Date/Time */}
-          <p className="text-white/90 text-sm font-medium mb-2">
+          <p className="text-white/90 text-xs sm:text-sm font-medium mb-1 sm:mb-2">
             {dateInfo.day} {dateInfo.month}{timeStr ? ` • ${timeStr}` : ''}
           </p>
 
           {/* Title */}
-          <h3 className="font-bold text-white leading-tight group-hover:text-primary-light transition-colors text-lg md:text-xl">
+          <h3 className="font-bold text-white leading-tight group-hover:text-primary-light transition-colors text-base sm:text-lg md:text-xl">
             {event.title}
           </h3>
         </div>
@@ -159,23 +159,42 @@ function Events() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Hero Section */}
-      <div className="bg-gray-900 py-12 md:py-16">
+      <div className="bg-gray-900 py-8 sm:py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-3">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-2 sm:mb-3">
             Ngjarje në Pazarin e Ri
           </h1>
-          <p className="text-base md:text-lg text-gray-300 max-w-3xl">
+          <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-3xl">
             Zbuloni ngjarjet, aktivitetet dhe festivalet që japin jetë Pazarit të Ri gjatë gjithë vitit.
           </p>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Mobile Category Filter - Horizontal scroll */}
+        <div className="lg:hidden mb-4">
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 min-h-[44px] ${
+                  selectedCategory === cat.id
+                    ? 'bg-primary text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-          {/* Left Sidebar - Filters */}
-          <div className="lg:col-span-1 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+
+          {/* Left Sidebar - Filters (hidden on mobile, shown on desktop) */}
+          <div className="hidden lg:block lg:col-span-1 space-y-6">
 
             {/* Calendar */}
             <div className="bg-white rounded-xl shadow-sm p-4">
@@ -194,7 +213,7 @@ function Events() {
               {selectedDate && (
                 <button
                   onClick={clearDateFilter}
-                  className="w-full mt-4 px-4 py-2 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                  className="w-full mt-4 px-4 py-2 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors min-h-[44px]"
                 >
                   Kthehu te sot
                 </button>
@@ -211,7 +230,7 @@ function Events() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors text-sm ${
+                    className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors text-sm min-h-[44px] ${
                       selectedCategory === cat.id
                         ? 'bg-primary text-white font-semibold'
                         : 'text-gray-700 hover:bg-gray-100'
@@ -233,7 +252,7 @@ function Events() {
                       setSelectedDate(null)
                       setSelectedCategory('all')
                     }}
-                    className="text-xs text-primary hover:underline"
+                    className="text-xs text-primary hover:underline min-h-[44px] flex items-center"
                   >
                     Pastro të gjitha
                   </button>
@@ -254,32 +273,32 @@ function Events() {
           <div className="lg:col-span-3">
 
             {/* Section Header */}
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+            <div className="mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Ngjarjet e Ardhshme
               </h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 text-xs sm:text-sm mt-1">
                 {sortedEvents.length} ngjarje{sortedEvents.length !== 1 ? '' : ''} të gjetura
               </p>
             </div>
 
             {/* Loading State */}
             {loading && (
-              <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <div className="flex justify-center items-center py-12 sm:py-20">
+                <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-primary"></div>
               </div>
             )}
 
             {/* Error State */}
             {error && (
-              <div className="text-center py-20">
+              <div className="text-center py-12 sm:py-20">
                 <p className="text-red-600">{error}</p>
               </div>
             )}
 
             {/* Events Grid */}
             {!loading && !error && sortedEvents.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {sortedEvents.map(event => (
                   <EventCard key={event.id} event={event} />
                 ))}
@@ -288,12 +307,12 @@ function Events() {
 
             {/* Empty State */}
             {!loading && !error && sortedEvents.length === 0 && (
-              <div className="text-center py-20 bg-white rounded-xl shadow-sm">
-                <CalendarIcon size={64} className="mx-auto text-gray-300 mb-4" />
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+              <div className="text-center py-12 sm:py-20 bg-white rounded-xl shadow-sm px-4">
+                <CalendarIcon size={48} className="mx-auto text-gray-300 mb-4 sm:w-16 sm:h-16" />
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                   Asnjë ngjarje
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   {selectedDate
                     ? 'Nuk ka ngjarje për këtë datë.'
                     : selectedCategory !== 'all'
@@ -304,7 +323,7 @@ function Events() {
                 {!selectedDate && selectedCategory !== 'all' && (
                   <button
                     onClick={() => setSelectedCategory('all')}
-                    className="mt-4 px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
+                    className="mt-4 px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium min-h-[44px]"
                   >
                     Pastro filtrat
                   </button>

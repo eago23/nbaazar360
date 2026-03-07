@@ -146,7 +146,7 @@ const Story = {
       search = null
     } = options;
 
-    let sql = `SELECT * FROM ar_stories WHERE is_published = 1`;
+    let sql = `SELECT s.*, u.business_name FROM ar_stories s LEFT JOIN users u ON s.vendor_id = u.id WHERE s.is_published = 1`;
     const params = [];
 
     if (featured === true) {

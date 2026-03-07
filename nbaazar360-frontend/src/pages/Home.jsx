@@ -10,7 +10,7 @@ function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section - Softer Design */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden">
         {/* Background Image - Better fitting */}
         <div className="absolute inset-0">
           <div className="w-full h-full">
@@ -26,32 +26,32 @@ function Home() {
         </div>
 
         {/* Hero Content - More natural spacing */}
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto py-8">
           {/* Small badge - softer style */}
-          <div className="inline-block mb-8 px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
-            <span className="text-white/90 font-medium text-sm">
+          <div className="inline-block mb-4 sm:mb-8 px-4 sm:px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
+            <span className="text-white/90 font-medium text-xs sm:text-sm">
               Eksperiencë Kulturore Dixhitale
             </span>
           </div>
 
           {/* Main Heading - Softer typography */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-2 sm:mb-4 leading-tight">
             Pazari i Ri
           </h1>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-red-200 mb-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-red-200 mb-4 sm:mb-8">
             I Rizbuluar
           </h2>
 
           {/* Subtitle - Better readability */}
-          <p className="text-lg md:text-xl text-gray-200 mb-12 font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-8 sm:mb-12 font-light max-w-2xl mx-auto leading-relaxed px-2">
             Zbuloni Pazarin e Ri si kurrë më parë. Një hapësirë ku historia, kultura dhe jeta moderne e Tiranës bashkohen në një përvojë unike digjitale.
           </p>
 
           {/* CTA Buttons - Softer design */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
             <Link
               to="/eksplorimi-360"
-              className="group inline-flex items-center space-x-2 px-8 py-4 bg-primary text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:bg-primary-dark transition-all duration-300"
+              className="group inline-flex items-center justify-center space-x-2 w-full sm:w-auto px-6 sm:px-8 py-4 bg-primary text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:bg-primary-dark transition-all duration-300 min-h-[52px]"
             >
               <Compass size={20} />
               <span>Fillo Eksplorimin</span>
@@ -60,7 +60,7 @@ function Home() {
 
             <Link
               to="/histori-ar"
-              className="inline-flex items-center space-x-2 px-8 py-4 bg-white/95 backdrop-blur-sm text-secondary font-semibold rounded-xl shadow-lg hover:bg-white transition-all duration-300"
+              className="inline-flex items-center justify-center space-x-2 w-full sm:w-auto px-6 sm:px-8 py-4 bg-white/95 backdrop-blur-sm text-secondary font-semibold rounded-xl shadow-lg hover:bg-white transition-all duration-300 min-h-[52px]"
             >
               <BookOpen size={20} />
               <span>Shiko Historinë AR</span>
@@ -70,24 +70,24 @@ function Home() {
       </section>
 
       {/* Features Section - Cards with Images */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-10 sm:py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
               Eksploro në Mënyra të Ndryshme
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-2">
               Zgjedh mënyrën tënde të preferuar për të zbuluar Pazarin e Ri të Tiranës
             </p>
           </div>
 
           {/* Cards Grid - Compact cards with images */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
 
             {/* Card 1: 360° Exploration */}
             <Link to="/eksplorimi-360" className="group">
-              <div className="relative h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 sm:hover:scale-105">
                 {/* Background Image with Overlay */}
                 <img
                   src="https://bigsee.eu/wp-content/uploads/2019/03/01_bazaar-tirana.jpg.webp"
@@ -119,7 +119,7 @@ function Home() {
 
             {/* Card 2: AR Stories */}
             <Link to="/histori-ar" className="group">
-              <div className="relative h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 sm:hover:scale-105">
                 {/* Background Image with Overlay */}
                 <img
                   src="https://d10ic2gxw9yhll.cloudfront.net/public/DigitalAsset/d14d127efa8e863acb7c09b916629991/d14d127efa8e863acb7c09b916629991/full/original/0/default.jpeg"
@@ -151,7 +151,7 @@ function Home() {
 
             {/* Card 3: Events */}
             <Link to="/ngjarje" className="group">
-              <div className="relative h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 sm:hover:scale-105">
                 {/* Background Image with Overlay */}
                 <img
                   src="https://tirana.al/uploads/2023/12/20231205135055_rona-6.jpg"
@@ -183,7 +183,7 @@ function Home() {
 
             {/* Card 4: Businesses */}
             <Link to="/tregtaret" className="group">
-              <div className="relative h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 sm:hover:scale-105">
                 {/* Background Image with Overlay */}
                 <img
                   src="https://c7.alamy.com/comp/2A9D4PM/new-market-pazari-i-ri-tirana-albania-2A9D4PM.jpg"
@@ -218,21 +218,21 @@ function Home() {
       </section>
 
       {/* Social Media Section */}
-      <section className="py-16 bg-white border-t border-gray-200">
+      <section className="py-10 sm:py-16 bg-white border-t border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
             Na ndiqni në rrjetet sociale
           </h2>
-          <p className="text-gray-600 mb-8">
+          <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
             Qëndroni të përditësuar me lajmet dhe ngjarjet më të fundit nga Pazari i Ri
           </p>
 
-          <div className="flex justify-center space-x-6">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6 px-4 sm:px-0">
             <a
               href="https://www.facebook.com/pazariiritirane/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-3 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center space-x-3 px-6 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors min-h-[52px]"
             >
               <Facebook size={24} />
               <span className="font-semibold">Facebook</span>
@@ -241,7 +241,7 @@ function Home() {
               href="https://www.instagram.com/pazariiri_newbazaar/?hl=en"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-3 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl hover:from-purple-700 hover:to-pink-600 transition-colors"
+              className="flex items-center justify-center space-x-3 px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl hover:from-purple-700 hover:to-pink-600 transition-colors min-h-[52px]"
             >
               <Instagram size={24} />
               <span className="font-semibold">Instagram</span>

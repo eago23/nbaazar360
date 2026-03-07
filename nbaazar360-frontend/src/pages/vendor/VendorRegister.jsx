@@ -80,20 +80,20 @@ function VendorRegister() {
 
   if (success) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 py-12 px-4">
+      <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 py-8 sm:py-12 px-4">
         <div className="max-w-md w-full text-center">
-          <div className="bg-white rounded-xl shadow-sm p-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="text-green-500" size={32} />
+          <div className="bg-white rounded-xl shadow-sm p-5 sm:p-8">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+              <CheckCircle className="text-green-500" size={28} />
             </div>
-            <h2 className="text-2xl font-bold text-secondary mb-4">Regjistrimi u Krye!</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-secondary mb-3 sm:mb-4">Regjistrimi u Krye!</h2>
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
               Kërkesa juaj për regjistrim u dërgua me sukses. Do të njoftoheni me email
               kur administratori të miratojë llogarinë tuaj.
             </p>
             <Link
               to="/hyrje"
-              className="inline-block px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors"
+              className="inline-block px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors min-h-[48px]"
             >
               Shko te Hyrja
             </Link>
@@ -104,25 +104,25 @@ function VendorRegister() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 py-8 sm:py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Store className="text-white" size={32} />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+            <Store className="text-white" size={28} />
           </div>
-          <h1 className="text-2xl font-bold text-secondary">Regjistrohu si Tregtar</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-secondary">Regjistrohu si Tregtar</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">
             Bashkohuni me platformën tonë dhe ndani historinë tuaj me botën
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-xl shadow-sm p-8">
+        <div className="bg-white rounded-xl shadow-sm p-5 sm:p-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
-              <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={20} />
-              <p className="text-red-700 text-sm">{error}</p>
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2 sm:space-x-3">
+              <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={18} />
+              <p className="text-red-700 text-xs sm:text-sm">{error}</p>
             </div>
           )}
 
@@ -181,7 +181,7 @@ function VendorRegister() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 min-w-[44px] min-h-[44px] flex items-center justify-center"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -248,9 +248,9 @@ function VendorRegister() {
                 type="checkbox"
                 checked={formData.terms_accepted}
                 onChange={handleChange}
-                className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                className="mt-1 h-5 w-5 text-primary focus:ring-primary border-gray-300 rounded"
               />
-              <label htmlFor="terms_accepted" className="text-sm text-gray-600">
+              <label htmlFor="terms_accepted" className="text-xs sm:text-sm text-gray-600">
                 Pranoj <a href="/politika-e-privatesise" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-dark underline">kushtet dhe termat</a> e përdorimit të platformës *
               </label>
             </div>
@@ -259,7 +259,7 @@ function VendorRegister() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -270,8 +270,8 @@ function VendorRegister() {
           </form>
 
           {/* Login link */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
+          <div className="mt-4 sm:mt-6 text-center">
+            <p className="text-sm sm:text-base text-gray-600">
               Keni llogari?{' '}
               <Link to="/hyrje" className="text-primary hover:text-primary-dark font-medium">
                 Hyni këtu

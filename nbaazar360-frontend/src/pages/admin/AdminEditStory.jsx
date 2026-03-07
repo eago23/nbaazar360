@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Save, ArrowLeft, AlertCircle, Upload, Video, CheckCircle } from 'lucide-react'
-import { adminStoriesAPI, uploadAPI } from '../../services/api'
+import { adminStoriesAPI, uploadAPI, getMediaUrl } from '../../services/api'
 
 function AdminEditStory() {
   const { id } = useParams()
@@ -45,8 +45,9 @@ function AdminEditStory() {
         })
         setExistingVideoUrl(story.video_url || '')
         setExistingThumbnailUrl(story.thumbnail_url || '')
-        setVideoPreview(story.video_url || '')
-        setThumbnailPreview(story.thumbnail_url || '')
+        // Use getMediaUrl to construct full URLs for video and thumbnail previews
+        setVideoPreview(story.video_url ? getMediaUrl(story.video_url) : '')
+        setThumbnailPreview(story.thumbnail_url ? getMediaUrl(story.thumbnail_url) : '')
       } else {
         setError('Historia nuk u gjet')
       }

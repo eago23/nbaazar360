@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global scale - renders app at 90% to fit standard screens (1920x1080, 1366x768) at 100% zoom */
+html {
+  font-size: 90%;
+}
+
 * {
   margin: 0;
   padding: 0;

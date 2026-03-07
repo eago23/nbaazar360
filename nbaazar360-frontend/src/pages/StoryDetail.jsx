@@ -14,8 +14,9 @@ function StoryDetail() {
   }, [id])
 
   useEffect(() => {
-    if (story?.title) {
-      document.title = `n'Bazaar360 - ${story.title}`
+    const displayTitle = story?.title || story?.business_name || (story?.short_bio?.substring(0, 40))
+    if (displayTitle) {
+      document.title = `n'Bazaar360 - ${displayTitle}`
     } else {
       document.title = "n'Bazaar360 - Histori AR"
     }
@@ -128,17 +129,15 @@ function StoryDetail() {
         {/* Story Content - White Card at Bottom */}
         <div className="flex justify-center px-4 pb-8">
           <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl p-8">
-            {/* Title - Main Heading (or fallback to business name) */}
+            {/* Title - Main Heading (title OR truncated description - NEVER use business_name) */}
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              {story.title || story.artisan_name || 'Histori AR'}
+              {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
             </h1>
 
-            {/* Business/Artisan Name - Show as subtitle if title exists and is different */}
-            {story.artisan_name && story.title && story.artisan_name !== story.title && (
-              <p className="text-primary font-semibold text-xl mb-4">
-                {story.artisan_name}
-              </p>
-            )}
+            {/* Author - Always show business_name (vendor) or "Admin" */}
+            <p className="text-primary font-semibold text-xl mb-4">
+              {story.business_name || (story.vendor_id ? 'Anonim' : 'Admin')}
+            </p>
 
             {/* Profession if available */}
             {story.profession && (

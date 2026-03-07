@@ -144,8 +144,12 @@ function AdminManageContent() {
                       className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover flex-shrink-0"
                     />
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-secondary text-sm sm:text-base truncate">{story.title}</h4>
-                      <p className="text-xs sm:text-sm text-gray-500 truncate">{story.artisan_name || story.vendor_name || 'Anonim'}</p>
+                      <h4 className="font-medium text-secondary text-sm sm:text-base truncate">
+                        {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">
+                        {story.vendor_id ? (story.business_name || story.vendor_name || 'Anonim') : 'Admin'}
+                      </p>
                       <div className="flex items-center flex-wrap gap-1.5 mt-1.5">
                         <span className={`inline-block px-2 py-0.5 rounded-full text-xs ${
                           Boolean(story.is_published) ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'

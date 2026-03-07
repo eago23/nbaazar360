@@ -3,6 +3,7 @@ const mysql = require('mysql2/promise');
 // Create connection pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT) || 3306,
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'nbaazar360',
@@ -12,7 +13,7 @@ const pool = mysql.createPool({
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
   charset: 'utf8mb4',
-  collation: 'utf8mb4_unicode_ci'
+  ssl: { rejectUnauthorized: false }
 });
 
 // Test connection

@@ -208,8 +208,12 @@ function Search() {
                             className="w-full h-40 object-cover"
                           />
                           <div className="p-4">
-                            <h3 className="font-medium text-secondary line-clamp-1">{story.title}</h3>
-                            <p className="text-sm text-gray-500 mt-1">{story.artisan_name}</p>
+                            <h3 className="font-medium text-secondary line-clamp-1">
+                              {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
+                            </h3>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {story.business_name || (story.vendor_id ? 'Anonim' : 'Admin')}
+                            </p>
                           </div>
                         </Link>
                       ))}

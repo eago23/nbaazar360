@@ -147,8 +147,10 @@ function AdminAnalytics() {
                   className="w-10 h-10 rounded-lg object-cover"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-secondary text-sm truncate">{story.title}</p>
-                  <p className="text-xs text-gray-500">{story.vendor_name || 'Anonim'}</p>
+                  <p className="font-medium text-secondary text-sm truncate">
+                    {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
+                  </p>
+                  <p className="text-xs text-gray-500">{story.vendor_id ? (story.vendor_name || story.business_name || 'Anonim') : 'Admin'}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-medium text-secondary">{(story.view_count || 0).toLocaleString()}</p>

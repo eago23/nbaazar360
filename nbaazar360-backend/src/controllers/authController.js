@@ -149,7 +149,7 @@ const login = asyncHandler(async (req, res) => {
   const token = generateToken(tokenPayload);
   const refreshToken = generateRefreshToken(tokenPayload);
 
-  logger.info('User login', { userId: user.id, username: user.username });
+  logger.info('User login', { userId: user.id, business_name: user.business_name });
 
   return sendSuccess(res, {
     token,

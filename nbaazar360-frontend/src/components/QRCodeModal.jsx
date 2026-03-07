@@ -24,7 +24,8 @@ function QRCodeModal({ story, onClose }) {
       // Download as PNG
       const pngFile = canvas.toDataURL('image/png')
       const downloadLink = document.createElement('a')
-      downloadLink.download = `qr-histori-${story.id}-${story.title?.replace(/\s+/g, '-') || 'story'}.png`
+      const displayTitle = story.title || story.business_name || 'story'
+      downloadLink.download = `qr-histori-${story.id}-${displayTitle.replace(/\s+/g, '-')}.png`
       downloadLink.href = pngFile
       downloadLink.click()
     }
@@ -57,13 +58,11 @@ function QRCodeModal({ story, onClose }) {
         {/* Story Info */}
         <div className="mb-6 text-center">
           <h3 className="text-lg font-bold text-gray-900 mb-2">
-            {story.title || story.business_name || 'Histori AR'}
+            {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
           </h3>
-          {story.business_name && story.title && (
-            <p className="text-sm text-primary font-medium">
-              {story.business_name}
-            </p>
-          )}
+          <p className="text-sm text-primary font-medium">
+            {story.business_name || (story.vendor_id ? 'Anonim' : 'Admin')}
+          </p>
           <p className="text-sm text-gray-600 mt-2">
             Skanoni me kameren e telefonit per te pare historine
           </p>

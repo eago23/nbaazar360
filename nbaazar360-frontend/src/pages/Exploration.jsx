@@ -163,19 +163,19 @@ function Exploration() {
         <>
         {/* Header */}
         <div className="bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
             <div className="max-w-3xl">
-              <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-4">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-secondary mb-2 sm:mb-4">
                 Eksplorimi 360°
               </h1>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
                 Klikoni mbi pikat në hartë për të eksploruar Pazarin e Ri përmes pamjeve panoramike 360°.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
           {loading ? (
             <div className="flex justify-center items-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -183,20 +183,20 @@ function Exploration() {
           ) : (
             <>
               {/* Info Box */}
-              <div className="mb-6 bg-blue-50 border-2 border-blue-200 rounded-xl p-4 flex items-start space-x-3">
-                <MapPin className="text-blue-600 flex-shrink-0 mt-0.5" size={20} />
+              <div className="mb-4 sm:mb-6 bg-blue-50 border-2 border-blue-200 rounded-xl p-3 sm:p-4 flex items-start space-x-3">
+                <MapPin className="text-blue-600 flex-shrink-0 mt-0.5" size={18} />
                 <div>
-                  <p className="text-blue-900 font-medium">
+                  <p className="text-blue-900 font-medium text-sm sm:text-base">
                     Klikoni mbi pikat e numëruara në hartë për të hapur pamjen 360°
                   </p>
-                  <p className="text-blue-700 text-sm mt-1">
+                  <p className="text-blue-700 text-xs sm:text-sm mt-1">
                     {locations.length} vendndodhje të disponueshme
                   </p>
                 </div>
               </div>
 
               {/* Interactive Map */}
-              <div className="mb-12">
+              <div className="mb-8 sm:mb-12">
                 <InteractiveMap
                   locations={locations}
                   onLocationClick={handleLocationClick}
@@ -205,37 +205,37 @@ function Exploration() {
 
               {/* Location Grid */}
               <div>
-                <h2 className="text-2xl font-bold text-secondary mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-secondary mb-4 sm:mb-6">
                   Të Gjitha Vendndodhjet
                 </h2>
 
                 {locations.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {locations.map((location, index) => (
                       <button
                         key={location.id}
                         onClick={() => handleLocationClick(location)}
-                        className="group bg-white rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-red-50 transition-all overflow-hidden text-left"
+                        className="group bg-white rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-red-50 transition-all overflow-hidden text-left min-h-[44px]"
                       >
                         {location.thumbnail_url && (
                           <img
                             src={getMediaUrl(location.thumbnail_url)}
                             alt={location.name}
-                            className="w-full h-40 object-cover"
+                            className="w-full h-32 sm:h-40 object-cover"
                           />
                         )}
 
-                        <div className="p-6">
-                          <div className="inline-flex items-center justify-center w-8 h-8 bg-primary text-white rounded-full font-bold text-sm mb-3">
+                        <div className="p-4 sm:p-6">
+                          <div className="inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 bg-primary text-white rounded-full font-bold text-xs sm:text-sm mb-2 sm:mb-3">
                             {index + 1}
                           </div>
 
-                          <h3 className="font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
+                          <h3 className="font-bold text-gray-900 group-hover:text-primary transition-colors mb-1 sm:mb-2 text-sm sm:text-base">
                             {location.name}
                           </h3>
 
                           {location.description && (
-                            <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                            <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-2 sm:mb-3">
                               {location.description}
                             </p>
                           )}
@@ -250,9 +250,9 @@ function Exploration() {
                     ))}
                   </div>
                 ) : (
-                  <div className="bg-white rounded-xl border-2 border-gray-200 p-12 text-center">
-                    <MapPin className="mx-auto text-gray-300 mb-4" size={48} />
-                    <p className="text-gray-500">Nuk ka vendndodhje të disponueshme</p>
+                  <div className="bg-white rounded-xl border-2 border-gray-200 p-8 sm:p-12 text-center">
+                    <MapPin className="mx-auto text-gray-300 mb-4" size={40} />
+                    <p className="text-gray-500 text-sm sm:text-base">Nuk ka vendndodhje të disponueshme</p>
                   </div>
                 )}
               </div>

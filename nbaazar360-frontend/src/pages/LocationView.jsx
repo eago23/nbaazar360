@@ -146,31 +146,31 @@ function LocationView() {
 
         {/* Hotspot Info Panel */}
         {activeHotspot && (
-          <div className="fixed top-20 right-4 sm:right-6 w-72 sm:w-80 bg-white rounded-xl shadow-xl overflow-hidden z-[9990] fade-in max-h-[70vh] overflow-y-auto">
+          <div className="fixed top-16 sm:top-20 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 bg-white rounded-xl shadow-xl overflow-hidden z-[9990] fade-in max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
             <div className="relative">
               {activeHotspot.image_url && (
                 <img
                   src={activeHotspot.image_url}
                   alt={activeHotspot.title}
-                  className="w-full h-40 object-cover"
+                  className="w-full h-32 sm:h-40 object-cover"
                 />
               )}
               <button
                 onClick={() => setActiveHotspot(null)}
-                className="absolute top-2 right-2 p-1 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+                className="absolute top-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               >
                 <X size={18} />
               </button>
             </div>
-            <div className="p-4">
-              <h3 className="font-semibold text-secondary mb-2">{activeHotspot.title}</h3>
-              <p className="text-gray-600 text-sm">{activeHotspot.description}</p>
+            <div className="p-3 sm:p-4">
+              <h3 className="font-semibold text-secondary mb-2 text-sm sm:text-base">{activeHotspot.title}</h3>
+              <p className="text-gray-600 text-xs sm:text-sm">{activeHotspot.description}</p>
               {activeHotspot.link_url && (
                 <a
                   href={activeHotspot.link_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-3 text-primary hover:text-primary-dark text-sm font-medium"
+                  className="inline-block mt-3 text-primary hover:text-primary-dark text-sm font-medium min-h-[44px] flex items-center"
                 >
                   Mëso më shumë →
                 </a>
@@ -181,16 +181,16 @@ function LocationView() {
       </div>
 
       {/* Location Info Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6 z-[100]">
+      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 sm:p-6 z-[100]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-start space-x-4">
-            <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
-              <Info className="text-white" size={24} />
+          <div className="flex items-start space-x-3 sm:space-x-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+              <Info className="text-white" size={20} />
             </div>
-            <div className="text-white">
-              <h2 className="font-semibold text-lg">{location.name}</h2>
-              <p className="text-gray-300 text-sm mt-1 max-w-2xl">{location.description}</p>
-              <p className="text-gray-400 text-xs mt-2">
+            <div className="text-white flex-1 min-w-0">
+              <h2 className="font-semibold text-base sm:text-lg truncate">{location.name}</h2>
+              <p className="text-gray-300 text-xs sm:text-sm mt-1 max-w-2xl line-clamp-2">{location.description}</p>
+              <p className="text-gray-400 text-xs mt-1 sm:mt-2">
                 {hotspots.length} pika interaktive
               </p>
             </div>

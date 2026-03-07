@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Save, ArrowLeft, AlertCircle, Upload, Video, CheckCircle } from 'lucide-react'
-import { vendorStoriesAPI, vendorUploadAPI } from '../../services/api'
+import { vendorStoriesAPI, vendorUploadAPI, getMediaUrl } from '../../services/api'
 import { useAuth } from '../../context/AuthContext'
 import { getErrorMessage, SUCCESS_MESSAGES, ERROR_MESSAGES } from '../../utils/errorMessages'
 
@@ -42,8 +42,9 @@ function VendorStoryForm() {
         setDescription(story.full_story || story.short_bio || '')
         setExistingVideoUrl(story.video_url || '')
         setExistingThumbnailUrl(story.thumbnail_url || '')
-        setVideoPreview(story.video_url || '')
-        setThumbnailPreview(story.thumbnail_url || '')
+        // Use getMediaUrl to construct full URLs for video and thumbnail previews
+        setVideoPreview(getMediaUrl(story.video_url) || '')
+        setThumbnailPreview(getMediaUrl(story.thumbnail_url) || '')
       }
     } catch (error) {
       console.error('Error fetching story:', error)

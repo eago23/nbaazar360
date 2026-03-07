@@ -117,7 +117,7 @@ function VendorProfile() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Cover & Logo */}
-      <section className="relative h-72 md:h-80 bg-gray-800">
+      <section className="relative h-56 sm:h-64 md:h-80 bg-gray-800">
         <img
           src={vendor.cover_url || vendor.cover_image_url || 'https://pikark.com/wp-content/uploads/listing-uploads/gallery/2020/12/Pazari-i-ri-Tirane-atelier4-studio_01.png'}
           alt=""
@@ -128,38 +128,38 @@ function VendorProfile() {
         {/* Back button */}
         <Link
           to="/tregtaret"
-          className="absolute top-6 left-6 flex items-center space-x-2 text-white hover:text-primary transition-colors bg-black/30 backdrop-blur-sm px-4 py-2 rounded-lg"
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center space-x-2 text-white hover:text-primary transition-colors bg-black/30 backdrop-blur-sm px-3 py-2 sm:px-4 rounded-lg min-h-[44px]"
         >
           <ArrowLeft size={20} />
-          <span>Kthehu</span>
+          <span className="hidden sm:inline">Kthehu</span>
         </Link>
 
         {/* Business Info Overlay */}
         <div className="absolute bottom-0 left-0 right-0">
-          <div className="max-w-7xl mx-auto px-6 pb-6">
-            <div className="flex items-end space-x-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-4 sm:pb-6">
+            <div className="flex items-end space-x-3 sm:space-x-6">
               {/* Logo */}
               {vendor.logo_url ? (
                 <img
                   src={vendor.logo_url}
                   alt={vendor.business_name}
-                  className="w-28 h-28 md:w-32 md:h-32 rounded-2xl border-4 border-white shadow-xl object-cover"
+                  className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-white shadow-xl object-cover"
                 />
               ) : (
-                <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl border-4 border-white shadow-xl bg-primary flex items-center justify-center">
-                  <span className="text-white text-4xl font-bold">
+                <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-white shadow-xl bg-primary flex items-center justify-center">
+                  <span className="text-white text-2xl sm:text-4xl font-bold">
                     {vendor.business_name?.charAt(0)}
                   </span>
                 </div>
               )}
 
               {/* Business Name & Type */}
-              <div className="flex-1 pb-2">
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+              <div className="flex-1 pb-1 sm:pb-2 min-w-0">
+                <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2 truncate">
                   {vendor.business_name}
                 </h1>
                 {vendor.business_type && (
-                  <span className="inline-block px-4 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-medium">
+                  <span className="inline-block px-2 sm:px-4 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-xs sm:text-sm font-medium">
                     {getBusinessTypeLabel(vendor.business_type)}
                   </span>
                 )}
@@ -170,40 +170,40 @@ function VendorProfile() {
       </section>
 
       {/* Main Content */}
-      <section className="max-w-7xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* LEFT COLUMN - Main Info */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8">
 
             {/* Description */}
             {(vendor.description || vendor.business_description) && (
-              <div className="bg-white rounded-xl border-2 border-gray-200 p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <BookOpen className="mr-3 text-primary" size={24} />
+              <div className="bg-white rounded-xl border-2 border-gray-200 p-4 sm:p-6 md:p-8">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 flex items-center">
+                  <BookOpen className="mr-2 sm:mr-3 text-primary" size={20} />
                   Rreth Biznesit
                 </h2>
-                <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
+                <p className="text-gray-700 text-base sm:text-lg leading-relaxed whitespace-pre-line">
                   {vendor.description || vendor.business_description}
                 </p>
               </div>
             )}
 
             {/* Stories Section */}
-            <div className="bg-white rounded-xl border-2 border-gray-200 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <Play className="mr-3 text-primary" size={24} />
+            <div className="bg-white rounded-xl border-2 border-gray-200 p-4 sm:p-6 md:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                <Play className="mr-2 sm:mr-3 text-primary" size={20} />
                 Historitë AR
               </h2>
 
               {stories.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   {stories.map(story => (
                     <Link
                       key={story.id}
                       to={`/histori-ar/${story.id}`}
                       className="group bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-all"
                     >
-                      <div className="relative h-48 overflow-hidden">
+                      <div className="relative h-40 sm:h-48 overflow-hidden">
                         <img
                           src={getMediaUrl(story.thumbnail_url) || 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=400'}
                           alt={story.title}
@@ -211,24 +211,24 @@ function VendorProfile() {
                         />
                         {/* Play overlay */}
                         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-                            <Play className="text-primary ml-1" size={24} fill="currentColor" />
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
+                            <Play className="text-primary ml-1" size={20} fill="currentColor" />
                           </div>
                         </div>
                         {/* View count */}
                         {story.view_count > 0 && (
-                          <div className="absolute bottom-3 right-3 flex items-center space-x-1 px-2 py-1 bg-black/70 rounded-full text-white text-xs">
+                          <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center space-x-1 px-2 py-1 bg-black/70 rounded-full text-white text-xs">
                             <Eye size={12} />
                             <span>{story.view_count}</span>
                           </div>
                         )}
                       </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-gray-900 group-hover:text-primary transition-colors">
-                          {story.title}
+                      <div className="p-3 sm:p-4">
+                        <h3 className="font-bold text-gray-900 group-hover:text-primary transition-colors text-sm sm:text-base">
+                          {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
                         </h3>
                         {story.short_bio && (
-                          <p className="text-gray-600 text-sm mt-2 line-clamp-2">
+                          <p className="text-gray-600 text-xs sm:text-sm mt-1 sm:mt-2 line-clamp-2">
                             {story.short_bio}
                           </p>
                         )}
@@ -237,9 +237,9 @@ function VendorProfile() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 bg-gray-50 rounded-xl">
-                  <Play size={48} className="mx-auto text-gray-300 mb-4" />
-                  <p className="text-gray-500 text-lg">
+                <div className="text-center py-8 sm:py-12 bg-gray-50 rounded-xl">
+                  <Play size={40} className="mx-auto text-gray-300 mb-4" />
+                  <p className="text-gray-500 text-base sm:text-lg">
                     Ky biznes nuk ka histori ende
                   </p>
                 </div>
@@ -251,11 +251,11 @@ function VendorProfile() {
           <div className="space-y-6">
 
             {/* Contact Information */}
-            <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-5">
+            <div className="bg-white rounded-xl border-2 border-gray-200 p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-5">
                 Informacione Kontakti
               </h3>
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
 
                 {/* Phone */}
                 {vendor.phone && (

@@ -386,8 +386,10 @@ function AdminDashboard() {
                         className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover flex-shrink-0"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium text-secondary text-xs sm:text-sm truncate">{story.title}</p>
-                        <p className="text-xs text-gray-500 truncate">{story.vendor_id ? (story.vendor_name || 'Anonim') : 'Admin'}</p>
+                        <p className="font-medium text-secondary text-xs sm:text-sm truncate">
+                          {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">{story.vendor_id ? (story.vendor_name || story.business_name || 'Anonim') : 'Admin'}</p>
                       </div>
                     </div>
                     <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium flex-shrink-0 ${
@@ -465,8 +467,10 @@ function AdminDashboard() {
                       className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover flex-shrink-0"
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-secondary text-sm sm:text-base truncate">{story.title}</p>
-                      <p className="text-xs sm:text-sm text-gray-500 truncate">{story.artisan_name || (story.vendor_id ? (story.vendor_name || 'Anonim') : 'Admin')}</p>
+                      <p className="font-semibold text-secondary text-sm sm:text-base truncate">
+                        {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
+                      </p>
+                      <p className="text-xs sm:text-sm text-gray-500 truncate">{story.vendor_id ? (story.business_name || story.vendor_name || 'Anonim') : 'Admin'}</p>
                       <p className="text-xs text-gray-400 mt-1">
                         <Eye size={12} className="inline mr-1" />
                         {story.view_count || 0} shikime

@@ -73,7 +73,7 @@ function AdminLayout() {
                 end={item.exact}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors min-h-[48px] ${
                     isActive
                       ? 'bg-primary text-white'
                       : 'text-gray-400 hover:bg-gray-700 hover:text-white'
@@ -102,14 +102,14 @@ function AdminLayout() {
             <div className="flex space-x-2">
               <Link
                 to="/"
-                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
+                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors min-h-[44px]"
               >
                 <Home size={16} />
                 <span className="text-sm">Faqja</span>
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors min-h-[44px]"
               >
                 <LogOut size={16} />
                 <span className="text-sm">Dil</span>
@@ -123,14 +123,14 @@ function AdminLayout() {
       <div className="lg:ml-64">
         {/* Top bar */}
         <header className="bg-white shadow-sm sticky top-0 z-30">
-          <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center justify-between px-4 py-2 sm:py-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-secondary"
+              className="lg:hidden text-secondary min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <Menu size={24} />
             </button>
-            <h1 className="text-xl font-semibold text-secondary">Paneli i Administratorit</h1>
+            <h1 className="text-base sm:text-xl font-semibold text-secondary truncate">Paneli i Administratorit</h1>
             <div className="w-10 lg:hidden" />
           </div>
         </header>
