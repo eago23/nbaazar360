@@ -285,18 +285,23 @@ function Exploration() {
 
       {/* Location Detail Modal */}
       {showDetailModal && selectedLocation && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
-            {/* Close Button */}
-            <button
-              onClick={closeDetailModal}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors"
-            >
-              <X size={20} />
-            </button>
-
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={closeDetailModal}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Thumbnail Image */}
             <div className="relative h-48 sm:h-64 bg-gray-200 flex-shrink-0">
+              {/* Close Button - Inside thumbnail area for proper positioning */}
+              <button
+                onClick={closeDetailModal}
+                className="absolute top-3 right-3 z-10 w-9 h-9 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors"
+              >
+                <X size={18} />
+              </button>
               {selectedLocation.thumbnail_url || selectedLocation.panorama_url ? (
                 <img
                   src={getMediaUrl(selectedLocation.thumbnail_url || selectedLocation.panorama_url)}

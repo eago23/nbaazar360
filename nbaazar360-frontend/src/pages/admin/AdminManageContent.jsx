@@ -134,7 +134,6 @@ function AdminManageContent() {
               <div key={story.id} className="bg-white rounded-lg border-2 border-gray-200 overflow-hidden hover:border-primary transition-colors">
                 <Link
                   to={`/histori-ar/${story.id}`}
-                  target="_blank"
                   className="block p-3 sm:p-4"
                 >
                   <div className="flex items-start space-x-3">
@@ -147,9 +146,6 @@ function AdminManageContent() {
                       <h4 className="font-medium text-secondary text-sm sm:text-base truncate">
                         {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
                       </h4>
-                      <p className="text-xs sm:text-sm text-gray-500 truncate">
-                        {story.vendor_id ? (story.business_name || story.vendor_name || 'Anonim') : 'Admin'}
-                      </p>
                       <div className="flex items-center flex-wrap gap-1.5 mt-1.5">
                         <span className={`inline-block px-2 py-0.5 rounded-full text-xs ${
                           Boolean(story.is_published) ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
