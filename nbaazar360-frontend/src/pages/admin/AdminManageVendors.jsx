@@ -21,7 +21,7 @@ function AdminManageVendors() {
   const fetchVendors = async () => {
     try {
       setLoading(true)
-      const params = {}
+      const params = { limit: 100 } // Request up to 100 vendors
       if (statusFilter !== 'all') {
         params.status = statusFilter
       }

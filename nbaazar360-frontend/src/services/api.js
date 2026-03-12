@@ -1,7 +1,13 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api'
-const BACKEND_URL = 'http://localhost:5000'
+// Use environment variables for API and backend URLs
+// In production, set VITE_API_URL and VITE_BACKEND_URL in .env
+// Falls back to localhost for development
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+
+// Export BACKEND_URL for use in other files if needed
+export { BACKEND_URL }
 
 /**
  * Convert a relative media URL to an absolute URL

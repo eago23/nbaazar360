@@ -1,15 +1,36 @@
 const MediaFile = require('../models/MediaFile');
 const { sendSuccess, sendError, sendNotFound } = require('../utils/responses');
 const { asyncHandler } = require('../middleware/errorHandler');
-const { deleteFile } = require('../middleware/upload');
+const { deleteFile, getFileUrl, useCloudinary } = require('../middleware/upload');
 const fs = require('fs');
 const path = require('path');
 const logger = require('../utils/logger');
 
 /**
+ * Get the URL from an uploaded file
+ * Cloudinary: req.file.path is the full HTTPS URL
+ * Local: construct relative path like /uploads/folder/filename
+ */
+const getUploadedFileUrl = (file, folder = '') => {
+  if (!file) return null;
+
+  // Cloudinary uploads have path as the full URL
+  if (file.path && file.path.startsWith('http')) {
+    return file.path;
+  }
+
+  // Local uploads - construct relative URL
+  if (file.filename) {
+    return folder ? `/uploads/${folder}/${file.filename}` : `/uploads/${file.filename}`;
+  }
+
+  return null;
+};
+
+/**
  * Upload image
  * POST /api/admin/upload/image
- * Files are saved directly to disk by multer middleware
+ * Files are saved to Cloudinary (or local disk as fallback)
  */
 const uploadImage = asyncHandler(async (req, res) => {
   if (!req.file) {
@@ -17,14 +38,15 @@ const uploadImage = asyncHandler(async (req, res) => {
   }
 
   try {
-    // File is already saved by multer, just get the path
-    const fileUrl = `/uploads/${req.file.filename}`;
+    // Get file URL (Cloudinary HTTPS URL or local relative path)
+    const fileUrl = getUploadedFileUrl(req.file, '');
     const fileSizeMB = (req.file.size / 1024 / 1024).toFixed(2);
 
     logger.info('Image uploaded', {
-      filename: req.file.filename,
+      filename: req.file.originalname,
       size: `${fileSizeMB} MB`,
-      path: fileUrl
+      url: fileUrl,
+      storage: useCloudinary ? 'cloudinary' : 'local'
     });
 
     // Save to database
@@ -47,8 +69,8 @@ const uploadImage = asyncHandler(async (req, res) => {
   } catch (error) {
     logger.error('Image upload failed', { error: error.message });
 
-    // Clean up file on error
-    if (req.file && req.file.path) {
+    // Clean up file on error (only for local uploads)
+    if (!useCloudinary && req.file && req.file.path) {
       try {
         fs.unlinkSync(req.file.path);
       } catch (unlinkErr) {
@@ -70,13 +92,15 @@ const uploadVideo = asyncHandler(async (req, res) => {
   }
 
   try {
-    const fileUrl = `/uploads/stories/${req.file.filename}`;
+    // Get file URL (Cloudinary HTTPS URL or local relative path)
+    const fileUrl = getUploadedFileUrl(req.file, 'stories');
     const fileSizeMB = (req.file.size / 1024 / 1024).toFixed(2);
 
     logger.info('Video uploaded', {
-      filename: req.file.filename,
+      filename: req.file.originalname,
       size: `${fileSizeMB} MB`,
-      path: fileUrl
+      url: fileUrl,
+      storage: useCloudinary ? 'cloudinary' : 'local'
     });
 
     // Save to database
@@ -98,7 +122,8 @@ const uploadVideo = asyncHandler(async (req, res) => {
   } catch (error) {
     logger.error('Video upload failed', { error: error.message });
 
-    if (req.file && req.file.path) {
+    // Clean up file on error (only for local uploads)
+    if (!useCloudinary && req.file && req.file.path) {
       try {
         fs.unlinkSync(req.file.path);
       } catch (unlinkErr) {
@@ -120,13 +145,15 @@ const uploadPanorama = asyncHandler(async (req, res) => {
   }
 
   try {
-    const fileUrl = `/uploads/panoramas/${req.file.filename}`;
+    // Get file URL (Cloudinary HTTPS URL or local relative path)
+    const fileUrl = getUploadedFileUrl(req.file, 'panoramas');
     const fileSizeMB = (req.file.size / 1024 / 1024).toFixed(2);
 
     logger.info('Panorama uploaded (HIGH QUALITY - NO COMPRESSION)', {
-      filename: req.file.filename,
+      filename: req.file.originalname,
       size: `${fileSizeMB} MB`,
-      path: fileUrl
+      url: fileUrl,
+      storage: useCloudinary ? 'cloudinary' : 'local'
     });
 
     // Save to database
@@ -149,7 +176,8 @@ const uploadPanorama = asyncHandler(async (req, res) => {
   } catch (error) {
     logger.error('Panorama upload failed', { error: error.message });
 
-    if (req.file && req.file.path) {
+    // Clean up file on error (only for local uploads)
+    if (!useCloudinary && req.file && req.file.path) {
       try {
         fs.unlinkSync(req.file.path);
       } catch (unlinkErr) {
@@ -173,11 +201,11 @@ const deleteMedia = asyncHandler(async (req, res) => {
     return sendNotFound(res, 'Media file');
   }
 
-  // Delete the actual file from disk
-  if (mediaFile.file_path && mediaFile.file_path.startsWith('/uploads/')) {
-    const deleted = deleteFile(mediaFile.file_path);
+  // Delete the actual file (supports both Cloudinary and local)
+  if (mediaFile.file_path) {
+    const deleted = await deleteFile(mediaFile.file_path);
     if (deleted) {
-      logger.info('File deleted from disk', { path: mediaFile.file_path });
+      logger.info('File deleted', { path: mediaFile.file_path });
     }
   }
 

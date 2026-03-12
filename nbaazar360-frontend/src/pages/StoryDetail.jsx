@@ -130,14 +130,9 @@ function StoryDetail() {
         <div className="flex justify-center px-4 pb-8">
           <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl p-8">
             {/* Title - Main Heading (title OR truncated description - NEVER use business_name) */}
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
             </h1>
-
-            {/* Author - Always show business_name (vendor) or "Admin" */}
-            <p className="text-primary font-semibold text-xl mb-4">
-              {story.business_name || (story.vendor_id ? 'Anonim' : 'Admin')}
-            </p>
 
             {/* Profession if available */}
             {story.profession && (

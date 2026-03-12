@@ -1,9 +1,18 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const {
+  isCloudinaryConfigured,
+  imageStorage,
+  videoStorage,
+  panoramaStorage,
+  documentStorage,
+  vendorStorage,
+  deleteFromCloudinary
+} = require('../config/cloudinary');
 
 // ============================================
-// ENSURE UPLOAD DIRECTORIES EXIST
+// ENSURE LOCAL UPLOAD DIRECTORIES EXIST (FALLBACK)
 // ============================================
 
 const uploadDirs = [
@@ -44,11 +53,11 @@ const ALLOWED_MIME_TYPES = {
 };
 
 // ============================================
-// STORAGE CONFIGURATIONS
+// LOCAL STORAGE CONFIGURATIONS (FALLBACK)
 // ============================================
 
 /**
- * Create disk storage for a specific folder
+ * Create disk storage for a specific folder (fallback when Cloudinary not configured)
  */
 const createDiskStorage = (folder) => multer.diskStorage({
   destination: (req, file, cb) => {
@@ -66,13 +75,13 @@ const createDiskStorage = (folder) => multer.diskStorage({
   }
 });
 
-// Storage for different upload types
-const panoramaStorage = createDiskStorage('panoramas');
-const vendorStorage = createDiskStorage('vendors');
-const storyStorage = createDiskStorage('stories');
-const eventStorage = createDiskStorage('events');
-const documentStorage = createDiskStorage('documents');
-const generalStorage = createDiskStorage('');
+// Local storage options for fallback
+const localPanoramaStorage = createDiskStorage('panoramas');
+const localVendorStorage = createDiskStorage('vendors');
+const localStoryStorage = createDiskStorage('stories');
+const localEventStorage = createDiskStorage('events');
+const localDocumentStorage = createDiskStorage('documents');
+const localGeneralStorage = createDiskStorage('');
 
 // ============================================
 // FILE FILTERS
@@ -112,6 +121,19 @@ const mediaFilter = (req, file, cb) => {
 };
 
 // ============================================
+// DETERMINE STORAGE (Cloudinary or Local)
+// ============================================
+
+const useCloudinary = isCloudinaryConfigured();
+
+// Log which storage is being used
+if (useCloudinary) {
+  console.log('Using Cloudinary storage for file uploads');
+} else {
+  console.log('Using local disk storage for file uploads (Cloudinary not configured)');
+}
+
+// ============================================
 // UPLOAD MIDDLEWARES
 // ============================================
 
@@ -119,7 +141,7 @@ const mediaFilter = (req, file, cb) => {
  * Upload single image (general purpose)
  */
 const uploadImage = multer({
-  storage: generalStorage,
+  storage: useCloudinary ? imageStorage : localGeneralStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.IMAGE },
   fileFilter: imageFilter
 }).single('file');
@@ -128,7 +150,7 @@ const uploadImage = multer({
  * Upload single video
  */
 const uploadVideo = multer({
-  storage: storyStorage,
+  storage: useCloudinary ? videoStorage : localStoryStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.VIDEO },
   fileFilter: videoFilter
 }).single('file');
@@ -137,7 +159,7 @@ const uploadVideo = multer({
  * Upload single panorama (360 photo)
  */
 const uploadPanorama = multer({
-  storage: panoramaStorage,
+  storage: useCloudinary ? panoramaStorage : localPanoramaStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.PANORAMA },
   fileFilter: imageFilter
 }).single('file');
@@ -146,7 +168,7 @@ const uploadPanorama = multer({
  * Upload document (ID card)
  */
 const uploadDocument = multer({
-  storage: documentStorage,
+  storage: useCloudinary ? documentStorage : localDocumentStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.DOCUMENT },
   fileFilter: documentFilter
 }).single('id_document');
@@ -155,7 +177,7 @@ const uploadDocument = multer({
  * Upload vendor stall photo
  */
 const uploadStallPhoto = multer({
-  storage: vendorStorage,
+  storage: useCloudinary ? vendorStorage : localVendorStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.IMAGE },
   fileFilter: imageFilter
 }).single('stall_photo');
@@ -164,7 +186,7 @@ const uploadStallPhoto = multer({
  * Upload vendor files (ID document and optional stall photo)
  */
 const uploadVendorFilesMulter = multer({
-  storage: documentStorage,
+  storage: useCloudinary ? documentStorage : localDocumentStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.IMAGE },
   fileFilter: (req, file, cb) => {
     if (file.fieldname === 'id_document') {
@@ -195,7 +217,7 @@ const uploadVendorFiles = (req, res, next) => {
  * Upload vendor logo
  */
 const uploadLogo = multer({
-  storage: vendorStorage,
+  storage: useCloudinary ? vendorStorage : localVendorStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.IMAGE },
   fileFilter: imageFilter
 }).single('file');
@@ -204,7 +226,7 @@ const uploadLogo = multer({
  * Upload vendor cover image
  */
 const uploadCover = multer({
-  storage: vendorStorage,
+  storage: useCloudinary ? vendorStorage : localVendorStorage,
   limits: { fileSize: FILE_SIZE_LIMITS.IMAGE },
   fileFilter: imageFilter
 }).single('file');
@@ -253,24 +275,58 @@ const handleUploadError = (err, req, res, next) => {
 
 /**
  * Get the public URL path for an uploaded file
+ * For Cloudinary: returns req.file.path (full HTTPS URL)
+ * For local: returns relative path like /uploads/folder/filename
  */
-const getFileUrl = (filename, folder) => {
-  return `/uploads/${folder}/${filename}`;
+const getFileUrl = (file, folder) => {
+  if (!file) return null;
+
+  // Cloudinary uploads have path as the full URL
+  if (file.path && file.path.startsWith('http')) {
+    return file.path;
+  }
+
+  // Local uploads - construct relative URL
+  if (file.filename) {
+    return folder ? `/uploads/${folder}/${file.filename}` : `/uploads/${file.filename}`;
+  }
+
+  return null;
 };
 
 /**
- * Delete a file from uploads folder
+ * Delete a file (supports both Cloudinary and local)
+ * @param {string} fileUrl - The file URL to delete
+ * @returns {Promise<boolean>|boolean}
  */
-const deleteFile = (filePath) => {
-  const fullPath = path.join(process.cwd(), filePath.replace(/^\//, ''));
-  if (fs.existsSync(fullPath)) {
-    fs.unlinkSync(fullPath);
-    return true;
+const deleteFile = async (fileUrl) => {
+  if (!fileUrl) return false;
+
+  // Cloudinary URL
+  if (fileUrl.includes('cloudinary.com')) {
+    return await deleteFromCloudinary(fileUrl);
   }
+
+  // Local file
+  if (fileUrl.startsWith('/uploads/')) {
+    const fullPath = path.join(process.cwd(), fileUrl.replace(/^\//, ''));
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
+      return true;
+    }
+  }
+
   return false;
 };
 
-console.log('Multer configured for local disk storage');
+/**
+ * Check if a URL is a Cloudinary URL
+ */
+const isCloudinaryUrl = (url) => {
+  return url && url.includes('cloudinary.com');
+};
+
+console.log('Multer configured');
 console.log('File size limits: IMAGE=10MB, PANORAMA=50MB, VIDEO=100MB');
 
 module.exports = {
@@ -285,6 +341,8 @@ module.exports = {
   handleUploadError,
   getFileUrl,
   deleteFile,
+  isCloudinaryUrl,
+  useCloudinary,
   FILE_SIZE_LIMITS,
   ALLOWED_MIME_TYPES
 };

@@ -4,7 +4,7 @@ const Analytics = require('../models/Analytics');
 const { sendSuccess, sendPaginated, sendNotFound, sendError } = require('../utils/responses');
 const { asyncHandler } = require('../middleware/errorHandler');
 const { sendVendorApprovalEmail, sendVendorRejectionEmail } = require('../utils/email');
-const { deleteFile } = require('../middleware/upload');
+const { deleteFile, useCloudinary } = require('../middleware/upload');
 const { PAGINATION } = require('../config/constants');
 const logger = require('../utils/logger');
 const fs = require('fs');
@@ -174,6 +174,8 @@ const getAllVendors = asyncHandler(async (req, res) => {
     order = 'DESC'
   } = req.query;
 
+  console.log('[ADMIN VENDORS] Query params:', { status, page, limit, business_type, search });
+
   const result = await User.getVendors({
     page: parseInt(page),
     limit: Math.min(parseInt(limit), PAGINATION.MAX_LIMIT),
@@ -183,6 +185,8 @@ const getAllVendors = asyncHandler(async (req, res) => {
     sort,
     order
   });
+
+  console.log('[ADMIN VENDORS] Result:', { total: result.total, count: result.vendors.length, statuses: result.vendors.map(v => v.status) });
 
   return sendPaginated(
     res,
@@ -459,18 +463,29 @@ const uploadLogo = asyncHandler(async (req, res) => {
     // Get current user to check for old logo
     const vendor = await User.findById(req.user.id);
 
-    // Delete old logo if exists locally
-    if (vendor.logo_url && vendor.logo_url.startsWith('/uploads/')) {
-      deleteFile(vendor.logo_url);
+    // Delete old logo if exists (supports both Cloudinary and local)
+    if (vendor.logo_url) {
+      await deleteFile(vendor.logo_url);
       logger.info('Deleted old logo', { path: vendor.logo_url });
     }
 
-    // File is already saved by multer to uploads/vendors/
-    const logoUrl = `/uploads/vendors/${req.file.filename}`;
+    // Get file URL (Cloudinary HTTPS URL or local relative path)
+    let logoUrl;
+    if (req.file.path && req.file.path.startsWith('http')) {
+      // Cloudinary URL
+      logoUrl = req.file.path;
+    } else {
+      // Local path
+      logoUrl = `/uploads/vendors/${req.file.filename}`;
+    }
 
     await User.update(req.user.id, { logo_url: logoUrl });
 
-    logger.info('Logo uploaded', { userId: req.user.id, path: logoUrl });
+    logger.info('Logo uploaded', {
+      userId: req.user.id,
+      url: logoUrl,
+      storage: useCloudinary ? 'cloudinary' : 'local'
+    });
 
     return sendSuccess(res, { logo_url: logoUrl }, 'Logo uploaded successfully');
   } catch (error) {
@@ -492,18 +507,29 @@ const uploadCover = asyncHandler(async (req, res) => {
     // Get current user to check for old cover
     const vendor = await User.findById(req.user.id);
 
-    // Delete old cover if exists locally
-    if (vendor.cover_image_url && vendor.cover_image_url.startsWith('/uploads/')) {
-      deleteFile(vendor.cover_image_url);
+    // Delete old cover if exists (supports both Cloudinary and local)
+    if (vendor.cover_image_url) {
+      await deleteFile(vendor.cover_image_url);
       logger.info('Deleted old cover', { path: vendor.cover_image_url });
     }
 
-    // File is already saved by multer to uploads/vendors/
-    const coverUrl = `/uploads/vendors/${req.file.filename}`;
+    // Get file URL (Cloudinary HTTPS URL or local relative path)
+    let coverUrl;
+    if (req.file.path && req.file.path.startsWith('http')) {
+      // Cloudinary URL
+      coverUrl = req.file.path;
+    } else {
+      // Local path
+      coverUrl = `/uploads/vendors/${req.file.filename}`;
+    }
 
     await User.update(req.user.id, { cover_image_url: coverUrl });
 
-    logger.info('Cover uploaded', { userId: req.user.id, path: coverUrl });
+    logger.info('Cover uploaded', {
+      userId: req.user.id,
+      url: coverUrl,
+      storage: useCloudinary ? 'cloudinary' : 'local'
+    });
 
     return sendSuccess(res, { cover_image_url: coverUrl }, 'Cover image uploaded successfully');
   } catch (error) {

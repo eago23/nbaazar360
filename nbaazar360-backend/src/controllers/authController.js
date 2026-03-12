@@ -28,25 +28,33 @@ const vendorSignup = asyncHandler(async (req, res) => {
     return sendValidationError(res, [{ field: 'email', message: 'Adresa email nuk është e vlefshme' }]);
   }
 
-  // Check if email already exists
+  // Check if email already exists (only for pending/active accounts)
   const emailExists = await User.emailExists(email);
   if (emailExists) {
     return sendValidationError(res, [{ field: 'email', message: 'Ky email është i regjistruar tashmë' }]);
   }
 
-  // Check if business name already exists
+  // Check if business name already exists (only for pending/active accounts)
   const businessNameExists = await User.businessNameExists(business_name);
   if (businessNameExists) {
     return sendValidationError(res, [{ field: 'business_name', message: 'Ky emër biznesi është i regjistruar tashmë' }]);
   }
 
+  // Check if this is a rejected vendor trying to re-register
+  const rejectedVendor = await User.findRejectedByEmail(email);
+
   // Auto-generate username from email
   const baseUsername = email.split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g, '_');
   let username = baseUsername;
   let counter = 1;
-  while (await User.usernameExists(username)) {
-    username = `${baseUsername}_${counter}`;
-    counter++;
+  // For re-registration, we can reuse their existing username
+  if (!rejectedVendor) {
+    while (await User.usernameExists(username)) {
+      username = `${baseUsername}_${counter}`;
+      counter++;
+    }
+  } else {
+    username = rejectedVendor.username; // Keep the same username
   }
 
   // Handle file uploads - files are saved locally by multer
@@ -67,7 +75,7 @@ const vendorSignup = asyncHandler(async (req, res) => {
     }
   }
 
-  // Create vendor user
+  // Prepare vendor data
   const userData = {
     email,
     username,
@@ -85,7 +93,16 @@ const vendorSignup = asyncHandler(async (req, res) => {
     status: 'pending'
   };
 
-  const vendor = await User.create(userData);
+  let vendor;
+
+  if (rejectedVendor) {
+    // Re-register: Update existing rejected vendor record
+    logger.info('Re-registering rejected vendor', { email, previousId: rejectedVendor.id });
+    vendor = await User.reRegister(rejectedVendor.id, userData);
+  } else {
+    // New registration: Create new vendor record
+    vendor = await User.create(userData);
+  }
 
   // Notify admin of new vendor application
   try {

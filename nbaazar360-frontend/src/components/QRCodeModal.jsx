@@ -60,10 +60,7 @@ function QRCodeModal({ story, onClose }) {
           <h3 className="text-lg font-bold text-gray-900 mb-2">
             {story.title || (story.short_bio?.substring(0, 40) + (story.short_bio?.length > 40 ? '...' : '')) || 'Histori AR'}
           </h3>
-          <p className="text-sm text-primary font-medium">
-            {story.business_name || (story.vendor_id ? 'Anonim' : 'Admin')}
-          </p>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-gray-600">
             Skanoni me kameren e telefonit per te pare historine
           </p>
         </div>
@@ -77,16 +74,6 @@ function QRCodeModal({ story, onClose }) {
             level="H"
             includeMargin={true}
           />
-        </div>
-
-        {/* URL Display */}
-        <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
-          <p className="text-xs text-gray-500 mb-1 text-center font-medium">
-            Link i Historise:
-          </p>
-          <p className="text-xs text-gray-700 break-all text-center font-mono">
-            {storyUrl}
-          </p>
         </div>
 
         {/* Action Buttons */}

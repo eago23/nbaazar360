@@ -48,19 +48,38 @@ const User = {
   },
 
   /**
-   * Check if email exists
+   * Check if email exists (only for pending/active accounts)
+   * Rejected/suspended vendors can re-register with the same email
    */
   emailExists: async (email) => {
-    const users = await query('SELECT id FROM users WHERE email = ?', [email]);
+    const users = await query(
+      'SELECT id FROM users WHERE email = ? AND status IN (?, ?)',
+      [email, 'pending', 'active']
+    );
     return users.length > 0;
   },
 
   /**
-   * Check if business name exists
+   * Check if business name exists (only for pending/active accounts)
+   * Rejected/suspended vendors can re-register with the same business name
    */
   businessNameExists: async (businessName) => {
-    const users = await query('SELECT id FROM users WHERE business_name = ?', [businessName]);
+    const users = await query(
+      'SELECT id FROM users WHERE business_name = ? AND status IN (?, ?)',
+      [businessName, 'pending', 'active']
+    );
     return users.length > 0;
+  },
+
+  /**
+   * Find rejected vendor by email (for re-registration)
+   */
+  findRejectedByEmail: async (email) => {
+    const users = await query(
+      'SELECT * FROM users WHERE email = ? AND status = ?',
+      [email, 'rejected']
+    );
+    return users[0] || null;
   },
 
   /**
@@ -189,6 +208,49 @@ const User = {
   },
 
   /**
+   * Re-register a rejected vendor (update existing record back to pending)
+   */
+  reRegister: async (id, userData) => {
+    const passwordHash = await bcrypt.hash(userData.password, SALT_ROUNDS);
+
+    await query(
+      `UPDATE users SET
+        password_hash = ?,
+        username = ?,
+        business_name = ?,
+        business_description = ?,
+        phone = ?,
+        business_type = ?,
+        about = ?,
+        contact_info = ?,
+        id_document_url = ?,
+        stall_photo_url = ?,
+        terms_accepted = ?,
+        terms_accepted_at = ?,
+        status = 'pending',
+        rejection_reason = NULL,
+        updated_at = NOW()
+      WHERE id = ?`,
+      [
+        passwordHash,
+        userData.username,
+        userData.business_name,
+        userData.business_description || null,
+        userData.phone || null,
+        userData.business_type || null,
+        userData.about || null,
+        userData.contact_info || null,
+        userData.id_document_url || null,
+        userData.stall_photo_url || null,
+        userData.terms_accepted || false,
+        userData.terms_accepted ? new Date() : null,
+        id
+      ]
+    );
+    return User.findById(id);
+  },
+
+  /**
    * Suspend vendor
    */
   suspend: async (id, reason) => {
@@ -254,8 +316,10 @@ const User = {
 
     // Count total
     const countSql = sql.replace('SELECT *', 'SELECT COUNT(*) as total');
+    console.log('[USER MODEL] getVendors SQL:', countSql, 'Params:', params);
     const countResult = await query(countSql, params);
     const total = countResult[0].total;
+    console.log('[USER MODEL] getVendors total count:', total);
 
     // Add sorting and pagination
     const allowedSorts = ['created_at', 'business_name', 'full_name', 'username'];

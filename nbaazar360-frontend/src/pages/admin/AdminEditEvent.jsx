@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Save, ArrowLeft, AlertCircle, Upload } from 'lucide-react'
-import { adminEventsAPI, locationsAPI, uploadAPI } from '../../services/api'
+import { adminEventsAPI, locationsAPI, uploadAPI, getMediaUrl } from '../../services/api'
 
 function AdminEditEvent() {
   const { id } = useParams()
@@ -90,8 +90,9 @@ function AdminEditEvent() {
           is_featured: event.is_featured || false,
           is_published: event.is_published !== false
         })
-        setExistingThumbnailUrl(event.thumbnail_url || event.image_url || '')
-        setThumbnailPreview(event.thumbnail_url || event.image_url || '')
+        const imageUrl = event.thumbnail_url || event.image_url || ''
+        setExistingThumbnailUrl(imageUrl)
+        setThumbnailPreview(imageUrl ? getMediaUrl(imageUrl) : '')
       } else {
         setError('Ngjarja nuk u gjet')
       }

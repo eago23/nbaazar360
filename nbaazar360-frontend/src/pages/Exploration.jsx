@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, X, AlertCircle } from 'lucide-react'
+import { MapPin, X, AlertCircle, Navigation } from 'lucide-react'
 import { locationsAPI, getMediaUrl } from '../services/api'
 import InteractiveMap from '../components/InteractiveMap'
 import '../utils/leafletConfig'
@@ -11,6 +11,10 @@ function Exploration() {
   const [showViewer, setShowViewer] = useState(false)
   const [viewerError, setViewerError] = useState('')
   const viewerRef = useRef(null)
+
+  // Detail modal state
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [selectedLocation, setSelectedLocation] = useState(null)
 
   useEffect(() => {
     document.title = "n'Bazaar360 - Eksplorimi 360°"
@@ -60,10 +64,27 @@ function Exploration() {
     }
   }
 
+  // Open detail modal when clicking a location card
   const handleLocationClick = (location) => {
+    setSelectedLocation(location)
+    setShowDetailModal(true)
+  }
+
+  // Close detail modal
+  const closeDetailModal = () => {
+    setShowDetailModal(false)
+    setSelectedLocation(null)
+  }
+
+  // Open 360° viewer from detail modal
+  const openViewer = (location) => {
     console.log('=== OPENING 360° VIEWER ===')
     console.log('Location:', location.name)
     console.log('Panorama URL:', location.panorama_url)
+
+    // Close detail modal first
+    setShowDetailModal(false)
+    setSelectedLocation(null)
 
     setViewerError('')
     setCurrentLocation(location)
@@ -260,6 +281,84 @@ function Exploration() {
           )}
         </div>
         </>
+      )}
+
+      {/* Location Detail Modal */}
+      {showDetailModal && selectedLocation && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Close Button */}
+            <button
+              onClick={closeDetailModal}
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Thumbnail Image */}
+            <div className="relative h-48 sm:h-64 bg-gray-200 flex-shrink-0">
+              {selectedLocation.thumbnail_url || selectedLocation.panorama_url ? (
+                <img
+                  src={getMediaUrl(selectedLocation.thumbnail_url || selectedLocation.panorama_url)}
+                  alt={selectedLocation.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
+                  <MapPin className="text-gray-400" size={48} />
+                </div>
+              )}
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            </div>
+
+            {/* Content */}
+            <div className="p-5 sm:p-6 flex-1 overflow-y-auto">
+              {/* Location Name */}
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
+                {selectedLocation.name}
+              </h2>
+
+              {/* Description */}
+              {selectedLocation.description ? (
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-4">
+                  {selectedLocation.description}
+                </p>
+              ) : (
+                <p className="text-gray-400 text-sm italic mb-4">
+                  Nuk ka përshkrim të disponueshëm
+                </p>
+              )}
+
+              {/* Interactive Points Info */}
+              {Number(selectedLocation.interactive_points_count || selectedLocation.hotspots?.length || 0) > 0 && (
+                <div className="flex items-center text-sm text-gray-500 mb-4">
+                  <MapPin size={16} className="mr-2 text-primary" />
+                  <span>
+                    {selectedLocation.interactive_points_count || selectedLocation.hotspots?.length} pika interaktive
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Action Button */}
+            <div className="p-5 sm:p-6 pt-0 flex-shrink-0">
+              <button
+                onClick={() => openViewer(selectedLocation)}
+                disabled={!selectedLocation.panorama_url}
+                className="w-full flex items-center justify-center space-x-3 px-6 py-4 bg-[#dc2626] hover:bg-[#b91c1c] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-colors shadow-lg hover:shadow-xl"
+              >
+                <Navigation size={22} />
+                <span>Hap Eksplorimin 360°</span>
+              </button>
+              {!selectedLocation.panorama_url && (
+                <p className="text-center text-gray-500 text-xs mt-2">
+                  Pamja 360° nuk është e disponueshme për këtë vendndodhje
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* 360° Viewer Modal - True Full Screen */}
