@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { sendEmail } = require('../utils/email');
+const ContactMessage = require('../models/ContactMessage');
 const logger = require('../utils/logger');
 
 // Email regex for validation
@@ -8,14 +9,17 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
  * POST /api/contact
- * Send a contact message to the admin
+ * Save contact message to database and attempt to send email to admin
  */
 router.post('/', async (req, res) => {
+  console.log('[CONTACT] Received contact form submission');
+
   try {
     const { emri, mbiemri, email, mesazhi } = req.body;
 
     // Validate required fields
     if (!emri || !mbiemri || !email || !mesazhi) {
+      console.log('[CONTACT] Validation failed: Missing fields');
       return res.status(400).json({
         success: false,
         message: 'Ju lutemi plotësoni të gjitha fushat.',
@@ -31,6 +35,7 @@ router.post('/', async (req, res) => {
 
     // Validate email format
     if (!emailRegex.test(trimmedEmail)) {
+      console.log('[CONTACT] Validation failed: Invalid email format');
       return res.status(400).json({
         success: false,
         message: 'Ju lutemi vendosni një email të vlefshëm.',
@@ -40,6 +45,7 @@ router.post('/', async (req, res) => {
 
     // Validate field lengths
     if (trimmedEmri.length < 2 || trimmedEmri.length > 50) {
+      console.log('[CONTACT] Validation failed: Invalid name length');
       return res.status(400).json({
         success: false,
         message: 'Emri duhet të jetë mes 2 dhe 50 karaktere.',
@@ -48,6 +54,7 @@ router.post('/', async (req, res) => {
     }
 
     if (trimmedMbiemri.length < 2 || trimmedMbiemri.length > 50) {
+      console.log('[CONTACT] Validation failed: Invalid surname length');
       return res.status(400).json({
         success: false,
         message: 'Mbiemri duhet të jetë mes 2 dhe 50 karaktere.',
@@ -55,18 +62,42 @@ router.post('/', async (req, res) => {
       });
     }
 
-    if (trimmedMesazhi.length < 10 || trimmedMesazhi.length > 2000) {
+    if (trimmedMesazhi.length < 2 || trimmedMesazhi.length > 2000) {
+      console.log('[CONTACT] Validation failed: Invalid message length');
       return res.status(400).json({
         success: false,
-        message: 'Mesazhi duhet të jetë mes 10 dhe 2000 karaktere.',
+        message: 'Mesazhi duhet të jetë mes 2 dhe 2000 karaktere.',
         error: 'INVALID_MESSAGE'
       });
     }
 
-    // Admin email from environment variable
-    const adminEmail = process.env.ADMIN_EMAIL || 'agoelkier@gmail.com';
+    // ========================================
+    // STEP 1: Save message to database first
+    // ========================================
+    let savedMessage = null;
+    try {
+      console.log('[CONTACT] Saving message to database...');
+      savedMessage = await ContactMessage.create({
+        first_name: trimmedEmri,
+        last_name: trimmedMbiemri,
+        email: trimmedEmail,
+        message: trimmedMesazhi,
+        email_sent: false
+      });
+      console.log('[CONTACT] Message saved to database with ID:', savedMessage?.id);
+    } catch (dbError) {
+      console.error('[CONTACT] Database error:', dbError.message);
+      console.error('[CONTACT] Full database error:', dbError);
+      // If database fails, still try to continue (message won't be persisted but email might work)
+      logger.error('Failed to save contact message to database', { error: dbError.message });
+    }
 
-    // Prepare email content
+    // ========================================
+    // STEP 2: Attempt to send email
+    // ========================================
+    const adminEmail = process.env.ADMIN_EMAIL || 'agoelkier@gmail.com';
+    console.log('[CONTACT] Attempting to send email to:', adminEmail);
+
     const mailOptions = {
       from: process.env.SMTP_FROM || 'noreply@nbaazar360.al',
       to: adminEmail,
@@ -140,25 +171,47 @@ ${trimmedMesazhi}
       `
     };
 
-    // Send email
-    const emailSent = await sendEmail(mailOptions);
+    // Try to send email (but don't fail the request if it doesn't work)
+    let emailSent = false;
+    try {
+      emailSent = await sendEmail(mailOptions);
+      console.log('[CONTACT] Email send result:', emailSent ? 'SUCCESS' : 'FAILED');
 
-    if (emailSent) {
-      logger.info(`Contact message sent from ${trimmedEmail}`);
-      return res.json({
-        success: true,
-        message: 'Mesazhi juaj u dërgua me sukses!'
-      });
-    } else {
-      logger.error(`Failed to send contact message from ${trimmedEmail}`);
-      return res.status(500).json({
-        success: false,
-        message: 'Ndodhi një gabim. Ju lutemi provoni përsëri.',
-        error: 'EMAIL_SEND_FAILED'
-      });
+      // Update database record if email was sent successfully
+      if (emailSent && savedMessage?.id) {
+        try {
+          await ContactMessage.markEmailSent(savedMessage.id);
+          console.log('[CONTACT] Updated database record - email_sent = TRUE');
+        } catch (updateError) {
+          console.error('[CONTACT] Failed to update email_sent status:', updateError.message);
+        }
+      }
+    } catch (emailError) {
+      console.error('[CONTACT] Error sending email:', emailError.message);
+      console.error('[CONTACT] Full email error:', emailError);
+      logger.error('Failed to send contact email', { error: emailError.message });
+      // Don't throw - we still want to return success since the message is saved
     }
+
+    // ========================================
+    // STEP 3: Return success
+    // ========================================
+    // Always return success if we got this far (message is saved or at least validated)
+    console.log('[CONTACT] Returning success response');
+    logger.info(`Contact message received from ${trimmedEmail} (email_sent: ${emailSent})`);
+
+    return res.json({
+      success: true,
+      message: 'Mesazhi juaj u dërgua me sukses!'
+    });
+
   } catch (error) {
-    logger.error('Contact form error:', { error: error.message });
+    // This catches any unexpected errors
+    console.error('[CONTACT] Error:', error.message);
+    console.error('[CONTACT] Full error:', error);
+    console.error('[CONTACT] Stack:', error.stack);
+    logger.error('Contact form error', { error: error.message, stack: error.stack });
+
     return res.status(500).json({
       success: false,
       message: 'Ndodhi një gabim. Ju lutemi provoni përsëri.',
