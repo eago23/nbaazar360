@@ -11,6 +11,7 @@ const storyRoutes = require('./stories');
 const eventRoutes = require('./events');
 const analyticsRoutes = require('./analytics');
 const vendorsRoutes = require('./vendors');
+const contactRoutes = require('./contact');
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -42,5 +43,6 @@ router.use('/stories', storyRoutes);
 router.use('/events', eventRoutes);
 router.use('/analytics', analyticsRoutes);
 router.use('/vendors', vendorsRoutes);
+router.use('/contact', contactRoutes);
 
 module.exports = router;

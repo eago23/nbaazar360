@@ -38,6 +38,7 @@ const VendorProfile = lazy(() => import('./pages/VendorProfile'))
 const Search = lazy(() => import('./pages/Search'))
 const Login = lazy(() => import('./pages/Login'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const Kontakt = lazy(() => import('./pages/Kontakt'))
 
 // Vendor Pages
 const VendorRegister = lazy(() => import('./pages/vendor/VendorRegister'))
@@ -84,6 +85,7 @@ function App() {
               <Route path="hyrje" element={<Login />} />
               <Route path="regjistrim" element={<VendorRegister />} />
               <Route path="politika-e-privatesise" element={<PrivacyPolicy />} />
+              <Route path="kontakt" element={<Kontakt />} />
             </Route>
 
             {/* Vendor Routes */}

@@ -35,10 +35,10 @@ function About() {
                   n'Bazaar360 është një nismë digjitale inovative që sjell Pazarin e Ri të Tiranës në botën virtuale. Kjo platformë u mundëson qytetarëve dhe turistëve të eksplorojnë këtë treg ikonik nga çdo vend dhe në çdo kohë.
                 </p>
                 <p>
-                  Ne synojmë të promovojmë produktet autentike nga artizanët lokalë, fermerët dhe bizneset e vogla, me një fokus të veçantë për vizitorët ndërkombëtarë.
+                  Ne synojmë të promovojmë bizneset lokale të Pazarit të Ri — nga artizanët dhe fermerët te dyqanet dhe restorantet — duke u dhënë atyre një prani digjitale moderne dhe duke i lidhur me një audiencë më të gjerë.
                 </p>
                 <p>
-                  Duke përdorur tura virtuale 360° dhe realitet të shtuar (AR), ne rikrijojmë eksperiencën e pazarit, duke ofruar një dritare digjitale në kulturën e tij të gjallë. Çdo dyqan dhe artizani është i pajisur me një kod QR unik që vizitorët mund ta skanojnë për të hyrë në profile biznesi, informacione shtesë, madje edhe demonstrime produktesh të shtuara.
+                  Duke përdorur tura virtuale 360° dhe realitet të shtuar (AR), ne rikrijojmë përvojën e pazarit, duke ofruar një dritare digjitale në kulturën e tij të gjallë. Çdo dyqan dhe artizani është i pajisur me një kod QR unik që vizitorët mund ta skanojnë për të hyrë në profilin e biznesit, informacione shtesë dhe demonstrime të historive AR.
                 </p>
               </div>
             </div>

@@ -61,11 +61,6 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/rreth-nesh" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
-                  Trashëgimia Kulturore
-                </Link>
-              </li>
-              <li>
                 <Link to="/regjistrim" className="text-gray-400 hover:text-white transition-colors py-1 inline-block min-h-[44px] flex items-center">
                   Bashkëpuno me Ne
                 </Link>

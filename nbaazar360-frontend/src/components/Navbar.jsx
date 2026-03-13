@@ -15,6 +15,7 @@ function Navbar() {
     { path: '/eksplorimi-360', label: 'Eksplorimi 360°' },
     { path: '/histori-ar', label: 'Histori AR' },
     { path: '/ngjarje', label: 'Ngjarje' },
+    { path: '/kontakt', label: 'Kontakt' },
     { path: '/tregtaret', label: 'Bizneset' },
   ]
 
